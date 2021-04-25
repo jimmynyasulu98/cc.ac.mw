@@ -58,6 +58,17 @@ def get_profile_welcome_message(session):
     return welcomeMessage
 
 
+def get_student_name(session):
+    soup = get_soup(session, "https://portal.cc.ac.mw/students/")
+    return soup.find('nav', attrs={'role': 'navigation'}).find('span', class_="hidden-xs").string
+
+
+def get_student_registration_number(session):
+    soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
+
+    return soup.find('div', class_="box box-academic").find('span', class_="data").string
+
+
 def get_bio_data(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
     bioData = soup.find('div', class_='box box-biodata').find('div', class_="box-body")
@@ -231,6 +242,4 @@ if __name__ == "__main__":
     username = ""
     password = ''
     sess = LoginSession(username, password, requests.session()).get_session()
-    print(is_user_logged_in(sess))
-    asse = get_assessments_details(sess, 2)
-    print(next(asse))
+    print(get_student_registration_number(sess) )
