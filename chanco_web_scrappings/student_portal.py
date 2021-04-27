@@ -7,6 +7,9 @@ import itertools
 chancellor college student portal
 """
 
+headers = {"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/90.0.4430.85 Safari/537.36"}
+
 
 class LoginSession:
     def __init__(self, username, password, session):
@@ -15,7 +18,7 @@ class LoginSession:
 
     def get_session(self):
         url = "https://portal.cc.ac.mw/students/login.php"
-        self.session.post(url, data=self.loginData)
+        self.session.post(url, data=self.loginData, headers=headers)
         return self.session
 
 
@@ -24,15 +27,7 @@ def get_soup(session, url):
         page = session.get(url)
         return BeautifulSoup(page.content, 'html.parser')
 
-    except HTTPError:
-        return False
-
-    except ConnectionError:
-
-        return False
-
-    except Timeout:
-
+    except (HTTPError, ConnectionError, Timeout):
         return False
 
 
@@ -94,7 +89,7 @@ def get_academic_details(session):
 
 def get_financial_details(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup("https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
         financialDetails = soup.find_all('div', class_='box box-academic')[1].find('div', class_="box-body")
 
         return financialDetails.text.replace('\t', '')
@@ -238,8 +233,115 @@ def get_assessments_details(session, semester=1):
             yield stringRepresentation
 
 
+"""Scrapping students courses registration history"""
+
+
+def get_current_year_registered_courses(session, semester):
+    soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/")
+
+    courses = soup.find('table', class_="table table-condensed")  # locating courses for two semesters
+
+    allCourses = ['#']
+    for rowItem in courses.text.split('\n'):  # loop for appending the courses to the list
+        if rowItem != "":
+            allCourses.append(rowItem.replace('\t', '').strip())
+    semesterOneRegisteredCourses = []
+    semesterTwoRegisteredCourses = []
+
+    def get_formatted_string(semestercourses):
+
+        stringRepresentation = ""
+
+        for indexValue, item in enumerate(semestercourses, start=1):
+            # formatting registered courses into a string to be displayed to user
+            if indexValue <= 5:
+                stringRepresentation += "{:<16} ".format(item)
+            else:
+                stringRepresentation += "{:<10} ".format(item)
+
+            if indexValue % 5 == 0:
+                stringRepresentation = stringRepresentation + "\n"
+
+        return stringRepresentation
+
+    # check if semester two courses exist in the list
+    if "Semester 2 Courses" in allCourses:
+        index = 0
+        # if semi 2 courses exist in the list, separate the lists in to two lists otherwise all are semi one courses
+        while allCourses[index] != "Semester 2 Courses":
+            semesterOneRegisteredCourses.append(allCourses.pop(index))
+
+        semesterTwoRegisteredCourses = allCourses  # remaining are semester 2 courses
+    else:
+        semesterOneRegisteredCourses = allCourses
+
+    if semester == "1":
+        return get_formatted_string(semesterOneRegisteredCourses)
+    else:
+        if len(semesterTwoRegisteredCourses) <= 0:
+            return "*You are not registered for second semester*"
+        else:
+            headings = ['#', 'Code', 'Title', 'Credits', 'Type']
+            semesterTwoRegisteredCourses.remove('Semester 2 Courses')
+            semesterTwoRegisteredCourses = headings + semesterTwoRegisteredCourses
+            return get_formatted_string(semesterTwoRegisteredCourses)
+
+
+def get_current_year_semester_courses():
+    pass
+
+
+def get_courses_registered_in_previous_years():
+    pass
+
+
+""" The following functions scraps Accommodation details"""
+
+
+def get_allocation_history(session):
+    soup = get_soup(session ,"https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
+
+    try:
+        data = soup.find('table', class_="t1").find_all("tr")
+        tableHeadings = []
+        tableBodyData = []
+        for row in data:
+            for head, body in (itertools.zip_longest(row.find_all("th"), row.find_all("td"))):
+                if body is not None:
+                    tableBodyData.append(body.text)
+                if head is not None:
+                    tableHeadings.append(head.text)
+
+        allData = tableHeadings + tableBodyData
+        stringRepresentation = ''
+        for index, item in enumerate(allData, start=1):
+            # formatting results to be displayed to user
+
+            stringRepresentation += "{:<16} ".format(item)
+
+            if index % 4 == 0:
+                stringRepresentation = stringRepresentation + "\n"
+
+        return stringRepresentation
+
+    except Exception as _:
+        return "No allocation history is available for you"
+
+
+def get_booking_history():
+    pass
+
+
+def get_accommodation_rules():
+    pass
+
+
+def get_notification():
+    pass
+
+
 if __name__ == "__main__":
-    username = ""
-    password = ''
-    sess = LoginSession(username, password, requests.session()).get_session()
-    print(get_student_registration_number(sess) )
+    username = "bsc-110-16"
+    password = 'jimmy222'
+    sess = LoginSession(username, password, requests.Session()).get_session()
+    print(get_allocation_history(sess)  )
