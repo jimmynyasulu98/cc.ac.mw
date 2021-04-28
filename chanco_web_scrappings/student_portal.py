@@ -213,8 +213,8 @@ def get_assessments_details(session, semester=1):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/assessment/")
     if str(semester) == "1":
         divs = soup.find('section', class_="content").find('div', attrs={'id': 'accordion'}).find_all('div',
-                                                                                                      class_="panel panel-default",
-                                                                                                      recursive=False)
+                            class_="panel panel-default",recursive=False)
+
         for key in get_assessment_dictionary(divs):
             stringRepresentation = str(key) + " "
             for listValue in get_assessment_dictionary(divs)[key]:
@@ -299,7 +299,7 @@ def get_courses_registered_in_previous_years():
 
 
 def get_allocation_history(session):
-    soup = get_soup(session ,"https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
+    soup = get_soup(session, "https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
 
     try:
         data = soup.find('table', class_="t1").find_all("tr")
@@ -325,7 +325,7 @@ def get_allocation_history(session):
         return stringRepresentation
 
     except Exception as _:
-        return "No allocation history is available for you"
+        return None
 
 
 def get_booking_history():
@@ -341,7 +341,7 @@ def get_notification():
 
 
 if __name__ == "__main__":
-    username = "bsc-110-16"
-    password = 'jimmy222'
+    username = ""
+    password = ''
     sess = LoginSession(username, password, requests.Session()).get_session()
-    print(get_allocation_history(sess)  )
+    print(get_allocation_history(sess))

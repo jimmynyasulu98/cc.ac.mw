@@ -1,5 +1,4 @@
 import datetime
-from chanco_web_scrappings import student_portal
 from chanco_web_scrappings import *
 
 
@@ -67,8 +66,6 @@ def get_login_unsuccessful_login_message():
 
 
 """Profile messages"""
-
-
 def get_profile_option_display_message(session):
     return student_portal.get_profile_welcome_message(session) + "\n\n1. Bio data \n\n2. Academic details " \
                                                                  "\n\n3.Financial details \n\n.4 Contact details \n\n"
