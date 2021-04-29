@@ -2,6 +2,7 @@
 Official website. Some files can only be accessed once a student has logged into his/ her
 account since The files are specific to a student .
  """
+from chanco_web_scrappings.general_methods import get_soup
 
 defaulImage = "https://freepikpsd.com/wp-content/uploads/2019/10/no-image-png-5-Transparent-Images.png"
 
@@ -57,7 +58,6 @@ def get_dean_of_students_image():
 
 
 def get_registrars_image():
-
     try:
         return 'data:image/jpeg;base64,' \
                '/9j/4AAQSkZJRgABAQEAYABgAAD' \
@@ -69,3 +69,39 @@ def get_registrars_image():
 
     except Exception as _:
         return None
+
+
+def get_news_image():
+    try:
+        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news.html")
+        news = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
+        for item in news:
+            item_1 = item.find('div', class_="row news-snippet").find('a')['href']
+            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}".format(item_1))
+            newsImageLInk = soup_1.find('div', class_="col-xs-11").find('div', class_="news-image").find('img')[
+                'src']
+            yield newsImageLInk
+
+    except Exception:
+        return False
+
+
+def get_article_image():
+    try:
+        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/articles.html")
+        news = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
+        for item in news:
+            item_1 = item.find('div', class_="row news-snippet").find('a')['href']
+            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/{}".format(item_1))
+            newsImageLInk = soup_1.find('div', class_="col-xs-11").find('div', class_="news-image").find('img')[
+                'src']
+            yield newsImageLInk
+
+    except Exception:
+        return False
+
+
+if __name__ == "__main__":
+    link = get_article_image()
+
+

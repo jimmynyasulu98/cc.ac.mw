@@ -8,6 +8,7 @@ SECRET_KEY = 'a secret ke'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+
 @app.route("/")
 def hello():
     return "cc.ac.mw services"
@@ -50,16 +51,32 @@ def sms_reply():
             return str(resp)
 
         else:
+            # Start of About chanco services
             if session['key1'] == '1':
                 pass
+            # End of about chanco services
+
+            # Start of administration services
             elif session['key1'] == '2':
                 pass
+            # End of administration services
+
+            # Start of department services
             elif session['key1'] == '3':
                 pass
+            # End of Department services
+
+            # start of faculties services
             elif session['key1'] == '4':
                 pass
+            # End of faculties services
+
+            # Start news and Events services
             elif session['key1'] == '5':
                 pass
+            # End of news and Events services
+
+            # Start of Chanco student portal Services
             elif session['key1'] == '6':
 
                 if session['key2'] == '':
@@ -67,14 +84,21 @@ def sms_reply():
                         log = app_utils.get_validate_login_credentials(msg)
                         username = log[0]
                         password = log[1]
-                        user_session = student_portal.LoginSession(username, password, requests.Session()).get_session()
-                        if student_portal.is_user_logged_in(user_session):
-                            mess = app_utils.get_portal_home_page_message(user_session)
-                            resp.message(mess)
-                            session['key2'] = '1'
-                        else:
-                            resp.message('Your login was unsuccessful')
-                            resp.message(app_utils.get_login_credentials_format_message())
+
+                        try:
+                            user_session = student_portal.LoginSession(username, password,
+                                                                       requests.Session()).get_session()
+                            if student_portal.is_user_logged_in(user_session):
+                                mess = app_utils.get_portal_home_page_message(user_session)
+                                resp.message(mess)
+                                session['key2'] = '1'
+                            else:
+                                resp.message('Your login was unsuccessful')
+                                resp.message(app_utils.get_login_credentials_format_message())
+
+                        except Exception as _:
+                            resp.message('Login was unsuccessful try later')
+
                     else:
                         resp.message("Sorry! It seems like you didnt provide info in a correct format")
                         resp.message(app_utils.get_login_credentials_format_message())
@@ -94,6 +118,8 @@ def sms_reply():
                     else:
                         resp.message("Invalid input")
                 return str(resp)
+            # end of chanco student portal services
+
             else:
                 pass
 
