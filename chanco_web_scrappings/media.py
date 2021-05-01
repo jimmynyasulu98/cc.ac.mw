@@ -88,11 +88,11 @@ def get_news_image():
 
 def get_article_image():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/articles.html")
+        soup = get_soup("https://www.cc.ac.mw/news/articles")
         news = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
         for item in news:
             item_1 = item.find('div', class_="row news-snippet").find('a')['href']
-            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/{}".format(item_1))
+            soup_1 = get_soup("https://www.cc.ac.mw/{}".format(item_1))
             newsImageLInk = soup_1.find('div', class_="col-xs-11").find('div', class_="news-image").find('img')[
                 'src']
             yield newsImageLInk
@@ -100,57 +100,50 @@ def get_article_image():
     except Exception:
         return False
 
+
 """Images about chancellor college places"""
 
 # library image
-about_library_image = get_about_chanco_places_image("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/library.html")
+about_library_image = get_about_chanco_places_image("https://www.cc.ac.mw/library")
 
 # The great hall image
-about_great_hall_image = get_about_chanco_places_image(
-    'http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/great-hall.html')
+about_great_hall_image = get_about_chanco_places_image('https://www.cc.ac.mw/great-hall')
 
 # Cafeteria image
-about_cafeteria_image = get_about_chanco_places_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/cafetaria.html')
+about_cafeteria_image = get_about_chanco_places_image('https://www.cc.ac.mw/cafetaria')
 
 # About senior commons room image
-about_senior_commons_room = get_about_chanco_places_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/senior'
-
-                                                          '-common-room.html')
+about_senior_commons_room = get_about_chanco_places_image('https://www.cc.ac.mw/senior-common-room')
 
 # About clinic image
-about_clinic_image = get_about_chanco_places_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/clinic.html')
+about_clinic_image = get_about_chanco_places_image('https://www.cc.ac.mw/clinic')
 
 # About Junior commons room image
-about_junior_commons_room_image = get_about_chanco_places_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw'
-                                                                '/junior-common-room.html')
+about_junior_commons_room_image = get_about_chanco_places_image('https://www.cc.ac.mw/junior-common-room')
 
-about_sports_complex_image = get_about_chanco_places_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/sports'
-                                                           '-complex.html')
+about_sports_complex_image = get_about_chanco_places_image('https://www.cc.ac.mw/sports-complex')
 
 """Images about Faculties and Deans of Faculties"""
 # faculty of science
-faculty_of_science_image = get_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/science.html')
-dean_of_science_image = get_dean_of_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/science/dean'
-                                                  '.html')
+faculty_of_science_image = get_faculty_image('https://www.cc.ac.mw/faculty/science')
+dean_of_science_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/science/dean')
 # Faculty of law
-faculty_of_law_image = get_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/law.html')
-dean_of_law_image = get_dean_of_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/law/dean.html')
+faculty_of_law_image = get_faculty_image('https://www.cc.ac.mw/faculty/law')
+dean_of_law_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/law/dean')
 
 # Faculty of education
-faculty_of_education_image = get_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/education.html')
-dean_of_education_image = get_dean_of_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/education'
-                                                    '/dean.html')
+faculty_of_education_image = get_faculty_image('https://www.cc.ac.mw/faculty/education')
+dean_of_education_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/education/dean')
 # Faculty of social science
-faculty_social_science_image = get_faculty_image_2('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/social-science'
-                                                 '.html')
+faculty_social_science_image = get_faculty_image_2('https://www.cc.ac.mw/faculty/social-science')
 
-dean_of_social_science_image = get_dean_of_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/social'
-                                                         '-science/dean.html')
+dean_of_social_science_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/social-science/dean')
 
 # Faculty of humanities
-faculty_of_humanities_image = get_faculty_image_2('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/humanities.html')
-dean_of_humanities_image = get_dean_of_faculty_image('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/faculty/humanities'
-                                                     '/dean.html')
+faculty_of_humanities_image = get_faculty_image_2('https://www.cc.ac.mw/faculty/humanities')
+dean_of_humanities_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/humanities/dean')
+
 if __name__ == "__main__":
-    x = get_article_image()
-    print(next(x))
+    print(dean_of_science_image)
+    print(faculty_of_law_image)
+    print(dean_of_law_image)

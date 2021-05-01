@@ -18,7 +18,7 @@ def get_about_chanco_places_image(url):
     try:
         soup = get_soup(url)
         imgLink = soup.find('div', class_="content-inner-wide")
-        return 'http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}'.format(imgLink.img['src'])
+        return imgLink.img['src']
 
     except Exception as _:
         return defaultImage
@@ -26,14 +26,10 @@ def get_about_chanco_places_image(url):
 def get_dean_of_faculty_image(url):
     try:
         soup = get_soup(url)
-        imageLink = soup.find('div', class_="col-xs-3 principal").img['src']
-        # The link is in form of a relative path eg ../../images/deans/law.jpg
-        # so a need to remove leading dotes
-        stringImageLink = ''
-        for item in imageLink.split('/'):
-            if item != '..':
-                stringImageLink += '/' + item
-        return 'http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}'.format(stringImageLink)
+
+        return soup.find('div', class_="col-xs-3 principal").img['src']
+
+
     except Exception as _:
 
         return defaultImage
