@@ -27,5 +27,204 @@ def get_chanco_at_glance():
         return False
 
 
+"""Places associated with chancellor college"""
+
+
+# About Chancellor college library
+def get_about_library():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/library.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+
+        itemList.pop(0)  # remove first row of unnecessary information
+        theLibrary = ''
+        services = ''
+        sectionsInTheLibrary = ''
+        studyingInTheLibrary = ''
+        underTheHood = ''
+
+        for _ in itemList:
+
+            if itemList[0] == 'Services':
+                itemList.pop(0)
+                break
+            theLibrary += itemList.pop(0) + '\n'
+
+        for _ in itemList:
+
+            if itemList[0] == 'Sections in the Library':
+                itemList.pop(0)
+                break
+            services += itemList.pop(0) + '\n'
+
+        for _ in itemList:
+
+            if itemList[0] != 'Studying in the Library':
+                sectionsInTheLibrary += itemList.pop(0) + '\n'
+            else:
+                itemList.pop(0)
+                break
+        sectionsInTheLibrary += itemList.pop(0) + '\n'
+        sectionsInTheLibrary += itemList.pop(0) + '\n'
+        itemList.pop(0)
+
+        for _ in itemList:
+
+            if itemList[0] != 'Under the Hood':
+                studyingInTheLibrary += itemList.pop(0) + '\n'
+            else:
+                itemList.pop(0)
+                break
+
+        for item in itemList:
+            underTheHood += itemList.pop(0)
+
+        return '{}{}{}{}{}'.format('\t\t*The Library*\n ' + theLibrary, '\t\t*Services*\n' + services,
+                                   '\t\t*Sections*\n' + sectionsInTheLibrary,
+                                   '\t\t*Studying In The Library*\n' + studyingInTheLibrary,
+                                   '\t\t*Under The Hood*\n' + underTheHood)
+
+    except Exception as _:
+        return False
+
+
+# About Chancellor college the great hall
+def get_about_the_great_hall():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/great-hall.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+
+# About Chancellor college cafeteria
+def get_about_cafeteria():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/cafetaria.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+
+# About Chancellor college Senior Common Room
+def get_about_senior_common_room():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/senior-common-room.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+
+# About Chancellor college Junior Common Room
+def get_about_junior_common_room():
+
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/junior-common-room.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+
+# About Chancellor college clinic
+def get_about_clinic():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/clinic.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+# About Chancellor college sports complex
+def get_about_sports_complex():
+    try:
+        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/sports-complex.html')
+        info = soup.find('div', class_="content-inner-wide")
+        itemList = []
+        for item in info.text.split('\n'):
+            if item != '':
+                itemList.append(item.replace('\t', '').strip())
+        stringRepresentation = ''
+        for paragraph in itemList:
+            stringRepresentation += paragraph + '\n'
+
+        return stringRepresentation
+
+    except Exception as _:
+
+        return False
+
+# About Chancellor college  Radio
+def get_about_chanco_radio():
+    pass
+
+
+# About Chancellor college Chapel
+def get_about_chapel():
+    pass
+
+
+# About chancellor college Nbs
+def get_about_chanco_nbs():
+    pass
+
+
 if __name__ == "__main__":
-    print(get_chanco_at_glance())
+    print(get_about_sports_complex())
