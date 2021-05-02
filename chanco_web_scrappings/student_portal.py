@@ -213,7 +213,8 @@ def get_assessments_details(session, semester=1):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/assessment/")
     if str(semester) == "1":
         divs = soup.find('section', class_="content").find('div', attrs={'id': 'accordion'}).find_all('div',
-                            class_="panel panel-default",recursive=False)
+                                                                                                      class_="panel panel-default",
+                                                                                                      recursive=False)
 
         for key in get_assessment_dictionary(divs):
             stringRepresentation = str(key) + " "
@@ -237,54 +238,77 @@ def get_assessments_details(session, semester=1):
 
 
 def get_current_year_registered_courses(session, semester):
-    soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/")
+    try:
+        soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/")
+        courses = soup.find('table', class_="table table-condensed")  # locating courses for two semesters
 
-    courses = soup.find('table', class_="table table-condensed")  # locating courses for two semesters
+        allCourses = ['#']
+        for rowItem in courses.text.split('\n'):  # loop for appending the courses to the list
+            if rowItem != "":
+                allCourses.append(rowItem.replace('\t', '').strip())
+        semesterOneRegisteredCourses = []
+        semesterTwoRegisteredCourses = []
 
-    allCourses = ['#']
-    for rowItem in courses.text.split('\n'):  # loop for appending the courses to the list
-        if rowItem != "":
-            allCourses.append(rowItem.replace('\t', '').strip())
-    semesterOneRegisteredCourses = []
-    semesterTwoRegisteredCourses = []
+        def get_formatted_string(semester_courses):
 
-    def get_formatted_string(semestercourses):
+            stringRepresentation = ""
 
-        stringRepresentation = ""
-
-        for indexValue, item in enumerate(semestercourses, start=1):
-            # formatting registered courses into a string to be displayed to user
-            if indexValue <= 5:
+            for indexValue, item in enumerate(semester_courses, start=1):
+                # formatting registered courses into a string to be displayed to user
                 stringRepresentation += "{:<16} ".format(item)
-            else:
-                stringRepresentation += "{:<10} ".format(item)
 
-            if indexValue % 5 == 0:
-                stringRepresentation = stringRepresentation + "\n"
+                if indexValue % 4 == 0:
+                    stringRepresentation = stringRepresentation + "\n"
 
-        return stringRepresentation
+            return stringRepresentation
 
-    # check if semester two courses exist in the list
-    if "Semester 2 Courses" in allCourses:
-        index = 0
-        # if semi 2 courses exist in the list, separate the lists in to two lists otherwise all are semi one courses
-        while allCourses[index] != "Semester 2 Courses":
-            semesterOneRegisteredCourses.append(allCourses.pop(index))
+        # check if semester two courses exist in the list
+        if "Semester 2 Courses" in allCourses:
+            index = 0
+            # if semi 2 courses exist in the list, separate the lists in to two lists otherwise all are semi one courses
+            while allCourses[index] != "Semester 2 Courses":
+                semesterOneRegisteredCourses.append(allCourses.pop(index))
 
-        semesterTwoRegisteredCourses = allCourses  # remaining are semester 2 courses
-    else:
-        semesterOneRegisteredCourses = allCourses
-
-    if semester == "1":
-        return get_formatted_string(semesterOneRegisteredCourses)
-    else:
-        if len(semesterTwoRegisteredCourses) <= 0:
-            return "*You are not registered for second semester*"
+            semesterTwoRegisteredCourses = allCourses  # remaining are semester 2 courses
         else:
-            headings = ['#', 'Code', 'Title', 'Credits', 'Type']
-            semesterTwoRegisteredCourses.remove('Semester 2 Courses')
-            semesterTwoRegisteredCourses = headings + semesterTwoRegisteredCourses
-            return get_formatted_string(semesterTwoRegisteredCourses)
+            semesterOneRegisteredCourses = allCourses
+
+        if semester == "1":
+            if len(semesterTwoRegisteredCourses) >= 1:
+                itemsToBeRemoved = []
+                try:
+                    for index in range(2, len(semesterOneRegisteredCourses), 5):
+                        itemsToBeRemoved.append(semesterOneRegisteredCourses[index])
+                except IndexError:
+                    pass
+
+                for index in range(len(itemsToBeRemoved)):
+                    semesterOneRegisteredCourses.remove(itemsToBeRemoved[index])
+                return get_formatted_string(semesterOneRegisteredCourses)
+            else:
+                return False
+
+        else:
+            if len(semesterTwoRegisteredCourses) >= 1:
+                headings = ['#', 'Code', 'Title', 'Credits', 'Type']
+                semesterTwoRegisteredCourses.remove('Semester 2 Courses')
+                semesterTwoRegisteredCourses = headings + semesterTwoRegisteredCourses
+
+                # removing course titles for easy display of messages on whatsApp
+                itemsToBeRemoved = []
+                try:
+                    for index in range(2, len(semesterTwoRegisteredCourses), 5):
+                        itemsToBeRemoved.append(semesterTwoRegisteredCourses[index])
+                except IndexError:
+                    pass
+
+                for index in range(len(itemsToBeRemoved)):
+                    semesterTwoRegisteredCourses.remove(itemsToBeRemoved[index])
+                return get_formatted_string(semesterTwoRegisteredCourses)
+            else:
+                return False
+    except Exception as _:
+        return False
 
 
 def get_current_year_semester_courses():
@@ -332,16 +356,37 @@ def get_booking_history():
     pass
 
 
-def get_accommodation_rules():
-    pass
+def get_accommodation_rules(session):
+    try:
+        soup = get_soup(session, 'http://127.0.0.1:8010/accomo/accomrules.html')
+        tagLocation = soup.find('td', attrs={"colspan": "4", "valign": "middle", "align": "justify"})
+        rules = tagLocation.find('div', attrs={"style": "max-height: 300px; overflow: scroll;"})
+
+        heading = 'The following is an extract from the Students Rules and Regulations \n\n RESIDENCE'
+        return heading + rules.text
+
+    except Exception as _:
+        return False
 
 
-def get_notification():
-    pass
+def get_notification(session):
+    try:
+        soup = get_soup(session, 'http://127.0.0.1:8010/accomo/notifications.html')
+
+        tagLocation = soup.find('td', attrs={"colspan": "1", "valign": "left", "align": "left"})
+        stringRepresentation = ''
+        for item in tagLocation.text.split('\n'):
+            if item != '':
+                stringRepresentation += item + '\n'
+
+        return stringRepresentation
+    except Exception as _:
+
+        return False
 
 
 if __name__ == "__main__":
-    username = ""
+    username = "bsc-110-16"
     password = ''
     sess = LoginSession(username, password, requests.Session()).get_session()
-    print(get_allocation_history(sess))
+

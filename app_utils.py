@@ -42,7 +42,7 @@ def get_validate_login_credentials(msg):
         return False
 
 
-def get_portal_home_page_message(session):
+def get_portal_home_message(session):
     return "Welcome  "+"*"+student_portal.get_student_name(session)+"*"+". You have Successfully logged in. Please " \
             "proceed by selecting an option below \n\n1.\U0001F468 My profile \n\n2.\U0001F4C3 Exam Results " \
             "\n\n3.\U0001F4D1 Assessments \n\n4.\U0001F5C4 My courses\n\n5.\U0001F4C5 Exam Timetable " \

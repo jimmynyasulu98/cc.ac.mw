@@ -3,6 +3,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 from chanco_web_scrappings import *
 import app_utils
 import requests
+from serialiser import *
 
 SECRET_KEY = 'a secret ke'
 app = Flask(__name__)
@@ -89,7 +90,8 @@ def sms_reply():
                             user_session = student_portal.LoginSession(username, password,
                                                                        requests.Session()).get_session()
                             if student_portal.is_user_logged_in(user_session):
-                                mess = app_utils.get_portal_home_page_message(user_session)
+                                mess = app_utils.get_portal_home_message(user_session)
+                                session['mySession'] = serialize_session(user_session)
                                 resp.message(mess)
                                 session['key2'] = '1'
                             else:
@@ -100,7 +102,7 @@ def sms_reply():
                             resp.message('Login was unsuccessful try later')
 
                     else:
-                        resp.message("Sorry! It seems like you didnt provide info in a correct format")
+                        resp.message("Sorry! It seems like you didn't provide info in a correct format")
                         resp.message(app_utils.get_login_credentials_format_message())
                 else:
                     if msg == "1":
