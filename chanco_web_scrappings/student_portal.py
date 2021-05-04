@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
 import itertools
-from chanco_web_scrappings.media import get_portal_display_image
+from chanco_web_scrappings.media_files import get_portal_display_image
 
 """class used to get a session for a student accessing 
 chancellor college student portal
@@ -18,9 +18,13 @@ class LoginSession:
         self.session = session
 
     def get_session(self):
-        url = "https://portal.cc.ac.mw/students/login.php"
-        self.session.post(url, data=self.loginData, headers=headers)
-        return self.session
+        try:
+            url = "https://portal.cc.ac.mw/students/login.php"
+            self.session.post(url, data=self.loginData, headers=headers)
+            return self.session
+
+        except Exception as _:
+            return False
 
 
 def get_soup(session, url):

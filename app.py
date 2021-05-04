@@ -5,7 +5,7 @@ import app_utils
 import requests
 from serialiser import *
 
-SECRET_KEY = 'a secret ke'
+SECRET_KEY = 'a secret key'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -15,7 +15,7 @@ def hello():
     return "cc.ac.mw services"
 
 
-@app.route("/sms", methods=['POST'])
+@app.route("/sms", methods=['GET', 'POST'])
 def sms_reply():
     user_session = None
     msg = request.form.get('Body')
@@ -80,30 +80,33 @@ def sms_reply():
             # Start of Chanco student portal Services
             elif session['key1'] == '6':
 
-                if session['key2'] == '':
+                if session['key2'] != '1':
                     if app_utils.get_validate_login_credentials(msg) is not False:
                         log = app_utils.get_validate_login_credentials(msg)
                         username = log[0]
                         password = log[1]
 
-                        try:
-                            user_session = student_portal.LoginSession(username, password,
-                                                                       requests.Session()).get_session()
+                        user_session = student_portal.LoginSession(username, password, requests.Session()).get_session()
+                        if user_session is not False:
+
                             if student_portal.is_user_logged_in(user_session):
                                 mess = app_utils.get_portal_home_message(user_session)
                                 session['mySession'] = serialize_session(user_session)
                                 resp.message(mess)
+                                resp.message('Your image').media(media_files.get_portal_display_image(
+                                    student_portal.get_student_registration_number(user_session))+'')
+
                                 session['key2'] = '1'
                                 session['key3'] = ''
                             else:
-                                resp.message('Your login was unsuccessful')
+                                resp.message(app_utils.get_login_unsuccessful_message())
                                 resp.message(app_utils.get_login_credentials_format_message())
 
-                        except Exception as _:
+                        else:
                             resp.message('Login was unsuccessful try later')
 
                     else:
-                        resp.message("Sorry! It seems like you didn't provide info in a correct format")
+                        resp.message(app_utils.get_invalid_login_credentials_message())
                         resp.message(app_utils.get_login_credentials_format_message())
                 else:
                     user_session = deserialize_session(session['mySession'])
@@ -126,27 +129,90 @@ def sms_reply():
                                 resp.message(app_utils.get_my_course_message())
                                 session['key3'] = '4'
                             elif msg == '5':
+                                # exam timetable message
                                 resp.message("Exam timetable currently not available")
                                 session['key3'] = '5'
                             elif msg == '6':
+                                # Accommodation message
+                                resp.message(app_utils.get_accommodation_display_message())
                                 session['key3'] = '6'
                             else:
                                 resp.message(
                                     app_utils.get_invalid_input_message() + app_utils.get_portal_home_message(
                                         user_session))
 
-                            session['key4'] = ''
+                            # session['key4'] = ''
                         else:
                             # start of profile option
                             if session['key3'] == "1":
-                                pass
+                                if msg == '1':
+                                    response = student_portal.get_bio_data(user_session)
+                                    if response is not False:
+                                        resp.message(response)
+                                    else:
+                                        resp.message(app_utils.get_could_not_fetch_message())
+                                    resp.message(app_utils.get_portal_home_or_previous_page_message())
+
+                                elif msg == '2':
+                                    response = student_portal.get_academic_details(user_session)
+                                    if response is not False:
+                                        resp.message(response)
+                                    else:
+                                        resp.message(app_utils.get_could_not_fetch_message())
+                                    resp.message(app_utils.get_portal_home_or_previous_page_message())
+
+                                elif msg == '3':
+                                    response = student_portal.get_financial_details(user_session)
+                                    if response is not False:
+                                        resp.message(response)
+                                    else:
+                                        resp.message(app_utils.get_could_not_fetch_message())
+                                    resp.message(app_utils.get_portal_home_or_previous_page_message())
+
+                                elif msg == '4':
+                                    response = student_portal.get_contact_details(user_session)
+                                    if response is not False:
+                                        resp.message(response)
+                                    else:
+                                        resp.message(app_utils.get_could_not_fetch_message())
+                                    resp.message(app_utils.get_portal_home_or_previous_page_message())
+
+                                elif msg == '0':
+                                    resp.message(app_utils.get_profile_option_display_message(user_session))
+                                elif msg == '00':
+                                    for key in list(session.keys()):
+                                        if key != 'mySession' and key != '_flashes':
+                                            session.pop(key)
+                                    counter += 1
+                                    session['counter'] = counter
+                                    session['key1'] = '6'
+                                    session['key2'] = '1'
+                                    session['key3'] = ''
+                                    resp.message(app_utils.get_portal_home_message(user_session))
+
+                                elif msg == '##':
+                                    for key in list(session.keys()):
+                                        if key != '_flashes':
+                                            session.pop(key)
+                                    session['key1'] = ''
+                                    counter += 1
+                                    session['counter'] = counter
+                                    resp.message(app_utils.get_welcoming_message())
+
+                                else:
+                                    resp.message(app_utils.get_invalid_input_message() + app_utils.
+                                                 get_profile_option_display_message(user_session) +
+                                                 app_utils.get_portal_home_or_previous_page_message())
+
                             # end of profile option
                     else:
-                        resp.message(app_utils.get_login_credentials_format_message())
-                        session.clear()
+                        for key in list(session.keys()):
+                            if key != '_flashes':
+                                session.pop(key)
                         counter += 1
                         session['counter'] = counter
-                        session['key1'] = '6'
+                        session['key1'] = ''
+                        resp.message(app_utils.get_welcoming_message())
 
             # end of chanco student portal services
 

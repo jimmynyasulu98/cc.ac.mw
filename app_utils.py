@@ -48,9 +48,13 @@ def get_invalid_login_credentials_message():
            "Make sure to include a space between your Registration number and Password\n\n"
 
 
-def get_login_unsuccessful_login_message():
+def get_login_unsuccessful_message():
     return '\U000026D4 _Sorry your login was Unsuccessful. Make sure your login details are correct or try again ' \
            'later _ \n\n'
+
+
+def get_could_not_fetch_message():
+    return "\U0001F613 _Sorry we could not fetch the information you requested at the moment. Please try again later_ "
 
 
 def get_portal_home_message(session):
@@ -65,14 +69,19 @@ def get_back_to_cc_home_or_previous_page_message():
     return "\n\n.0 \U00002B05 Back  \n\n.## \U00002196 Go to CC main menu \n\n Type exit or cancel to exit the session"
 
 
-def get_back_to_portal_home_or_previous_page_message():
-    return "\n\n.0 \U00002B05 Back \n\n.00 \U000021A9 Portal main menu \n\n.## \U00002196 Logout and go to CC main menu"
+def get_portal_home_or_previous_page_message():
+    return "\n\n0. \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main menu"
 
 
 # Message to be displayed when a profile option is selected
 def get_profile_option_display_message(session):
-    return student_portal.get_profile_welcome_message(session) + "\n\n1. Bio data \n\n2. Academic details " \
-                                                                 "\n\n3.Financial details \n\n.4 Contact details \n\n"
+    profileDisplayMessage = student_portal.get_profile_welcome_message(session)
+    if profileDisplayMessage is not False:
+        return profileDisplayMessage + "\n\n1. Bio data \n\n2. Academic details " \
+                                       "\n\n3.Financial details \n\n.4 Contact details \n\n"
+    else:
+        return "\n\n1. Bio data \n\n2. Academic details " \
+               "\n\n3.Financial details \n\n4. Contact details \n\n"
 
 
 # Display message when exam result option is selected
@@ -153,6 +162,7 @@ def get_about_news_and_events_display_message():
 def get_about_faculties_display_message():
     return "1. Faculty of science \n\n2. Faculty of law \n\n3. Faculty of education \n\n4. Faculty of social science" \
            " \n\n5. Faculty of humanities"
+
 
 # faculty display message
 def get_faculty_display_message():
