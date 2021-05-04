@@ -94,6 +94,7 @@ def sms_reply():
                                 session['mySession'] = serialize_session(user_session)
                                 resp.message(mess)
                                 session['key2'] = '1'
+                                session['key3'] = ''
                             else:
                                 resp.message('Your login was unsuccessful')
                                 resp.message(app_utils.get_login_credentials_format_message())
@@ -105,25 +106,56 @@ def sms_reply():
                         resp.message("Sorry! It seems like you didn't provide info in a correct format")
                         resp.message(app_utils.get_login_credentials_format_message())
                 else:
-                    if msg == "1":
-                        resp.message("Profile")
-                    elif msg == "2":
-                        resp.message("Exam Results")
-                    elif msg == '3':
-                        resp.message("Assessments")
-                    elif msg == '4':
-                        resp.message("My courses")
-                    elif msg == '5':
-                        resp.message("Exam Timetable")
-                    elif msg == '6':
-                        resp.message("Accommodation")
+                    user_session = deserialize_session(session['mySession'])
+                    if student_portal.is_user_logged_in(user_session):
+                        if session['key3'] == '':
+                            if msg == "1":
+                                # profile message
+                                resp.message(app_utils.get_profile_option_display_message(user_session))
+                                session['key3'] = '1'
+                            elif msg == "2":
+                                # Exam results main message
+                                resp.message(app_utils.get_exam_results_option_message())
+                                session['key3'] = '2'
+                            elif msg == '3':
+                                # Assessments main message
+                                resp.message(app_utils.get_assessment_message())
+                                session['key3'] = '3'
+                            elif msg == '4':
+                                # my courses message
+                                resp.message(app_utils.get_my_course_message())
+                                session['key3'] = '4'
+                            elif msg == '5':
+                                resp.message("Exam timetable currently not available")
+                                session['key3'] = '5'
+                            elif msg == '6':
+                                session['key3'] = '6'
+                            else:
+                                resp.message(
+                                    app_utils.get_invalid_input_message() + app_utils.get_portal_home_message(
+                                        user_session))
+
+                            session['key4'] = ''
+                        else:
+                            # start of profile option
+                            if session['key3'] == "1":
+                                pass
+                            # end of profile option
                     else:
-                        resp.message("Invalid input")
-                return str(resp)
+                        resp.message(app_utils.get_login_credentials_format_message())
+                        session.clear()
+                        counter += 1
+                        session['counter'] = counter
+                        session['key1'] = '6'
+
             # end of chanco student portal services
 
+            # start of others option services
             else:
                 pass
+            # end of others option services
+
+        return str(resp)
 
     else:
         counter += 1

@@ -108,7 +108,7 @@ about_sports_complex_image = get_about_chanco_places_image('https://www.cc.ac.mw
 faculty_of_science_image = get_faculty_image('https://www.cc.ac.mw/faculty/science')
 dean_of_science_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/science/dean')
 # Faculty of law
-#faculty_of_law_image = get_faculty_image('https://www.cc.ac.mw/faculty/law')
+faculty_of_law_image = get_faculty_image('https://www.cc.ac.mw/faculty/law')
 dean_of_law_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/law/dean')
 
 # Faculty of education
