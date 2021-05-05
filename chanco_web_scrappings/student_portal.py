@@ -23,16 +23,21 @@ class LoginSession:
             self.session.post(url, data=self.loginData, headers=headers)
             return self.session
 
-        except Exception as _:
+        except (HTTPError, ConnectionError, Timeout):
             return False
 
 
 def get_soup(session, url):
-    try:
-        page = session.get(url)
-        return BeautifulSoup(page.content, 'html.parser')
 
-    except (HTTPError, ConnectionError, Timeout):
+    if session is not False:
+        try:
+            page = session.get(url)
+            return BeautifulSoup(page.content, 'html.parser')
+
+        except (HTTPError, ConnectionError, Timeout):
+            return False
+
+    else:
         return False
 
 
@@ -42,6 +47,7 @@ def is_user_logged_in(session):
         try:
             _ = soup.find('nav', attrs={'role': 'navigation'}).find('span', class_="hidden-xs").string
             return True
+
         except Exception as _:
             return False
     else:
@@ -208,7 +214,7 @@ def get_semester_results(html_tag_location):
     return stringRepresentation
 
 
-def get_current_year_exam_results(session, semester=1):
+def get_current_year_exam_results(session, semester='1'):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/results/")
     if get_soup(session, "https://portal.cc.ac.mw/students/pages/results/") is not False:
         try:
@@ -252,12 +258,12 @@ def get_previous_year_exam_results(session):
                     else:
                         yearResults[year].append(listOfPreviousYears[year].
                                                  find('div', class_='box').next_sibling.find('div', class_='box-body '
-                                                                                                           'table-responsive no-padding'))
+                                                                                         'table-responsive no-padding'))
 
                         # looping through the two dimensional list and yield each semester results
             for year in range(len(yearResults)):
                 for semester in range(2):
-                    yield "*YEAR* \t " + str(year + 1) + "\t*SEMESTER*\t" + str(
+                    yield "*YEAR* \t " + str(year + 1) + "\t*SEMESTER*\t " + str(
                         semester + 1) + "\t*RESULTS* \n" + '{}'.format(get_semester_results(
                         yearResults[year][semester]))
 
@@ -478,4 +484,5 @@ if __name__ == "__main__":
     username = "bsc-110-16"
     password = 'jimmy222'
     sess = LoginSession(username, password, requests.Session()).get_session()
-    print(get_portal_display_image(get_student_registration_number(sess)))
+
+    print(get_student_balance(sess))

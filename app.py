@@ -94,7 +94,7 @@ def sms_reply():
                                 session['mySession'] = serialize_session(user_session)
                                 resp.message(mess)
                                 resp.message('Your image').media(media_files.get_portal_display_image(
-                                    student_portal.get_student_registration_number(user_session))+'')
+                                    student_portal.get_student_registration_number(user_session)))
 
                                 session['key2'] = '1'
                                 session['key3'] = ''
@@ -141,7 +141,7 @@ def sms_reply():
                                     app_utils.get_invalid_input_message() + app_utils.get_portal_home_message(
                                         user_session))
 
-                            # session['key4'] = ''
+                            session['key4'] = ''
                         else:
                             # start of profile option
                             if session['key3'] == "1":
@@ -188,7 +188,7 @@ def sms_reply():
                                     session['key1'] = '6'
                                     session['key2'] = '1'
                                     session['key3'] = ''
-                                    resp.message(app_utils.get_portal_home_message(user_session))
+                                    resp.message(app_utils.get_portal_home_message_2(user_session))
 
                                 elif msg == '##':
                                     for key in list(session.keys()):
@@ -205,6 +205,94 @@ def sms_reply():
                                                  app_utils.get_portal_home_or_previous_page_message())
 
                             # end of profile option
+                            # start of exam results option
+                            elif session['key3'] == '2':
+                                balance = student_portal.get_student_balance(user_session)
+                                if balance is not False:
+                                    if balance <= 0.00:
+                                        if session["key4"] == '':
+                                            if msg == '1':
+                                                resp.message(app_utils.get_current_year_exam_result_message())
+                                                session['key4'] = '1'
+                                            elif msg == '2':
+                                                results = student_portal.get_previous_year_exam_results(user_session)
+                                                if results is not False:
+                                                    for semi in results:
+                                                        resp.message(semi)
+                                                else:
+                                                    resp.message(app_utils.get_previous_exam_not_available() +
+                                                                 app_utils.get_exam_results_option_message() +
+                                                                 app_utils.get_portal_home_or_previous_page_message())
+                                            elif msg == '0':
+                                                resp.message(app_utils.get_portal_home_message_2(user_session))
+                                                session.pop('key3')
+                                                session['key3'] = ''
+                                            elif msg == '00':
+                                                resp.message(app_utils.get_portal_home_message_2(user_session))
+                                                session.pop('key3')
+                                                session['key3'] = ''
+                                            elif msg == '##':
+                                                for key in list(session.keys()):
+                                                    if key != '_flashes':
+                                                        session.pop(key)
+                                                session['key1'] = ''
+                                                counter += 1
+                                                session['counter'] = counter
+                                                resp.message(app_utils.get_welcoming_message())
+                                            else:
+                                                resp.message(app_utils.get_invalid_input_message() +
+                                                             app_utils.get_exam_results_option_message())  # revisit
+
+                                        else:
+                                            if msg == '1':
+                                                results = student_portal.get_current_year_exam_results(user_session)
+                                                if results is not False:
+                                                    resp.message(
+                                                        student_portal.get_current_year_exam_results(user_session, '1'))
+                                                else:
+                                                    resp.message(app_utils.get_exam_not_available('1')
+                                                                 + app_utils.get_exam_results_option_message())
+
+                                            elif msg == '2':
+                                                results = student_portal.get_current_year_exam_results(user_session,
+                                                                                                       '2')
+                                                if results is not False:
+                                                    resp.message(student_portal.
+                                                                 get_current_year_exam_results(user_session, '2'))
+                                                else:
+                                                    resp.message(app_utils.get_exam_not_available('2')
+                                                                 + app_utils.get_exam_results_option_message())
+
+                                            resp.message(app_utils.get_portal_home_or_previous_page_message())
+                                            session.pop('key4')
+                                            session['key4'] = ''
+
+                                    else:
+                                        resp.message(app_utils.get_balance_massage(user_session))  # revisit
+                                        resp.message(app_utils.get_portal_home_message_2(user_session))
+                                        session.pop('key3')
+                                        session['key3'] = ''
+
+                                else:
+                                    resp.message(app_utils.get_could_not_fetch_message())  # revisit
+                            # end of exam results option
+                            # start of assessments details
+                            elif session['key3'] == '3':
+                                if msg == '1':
+                                    pass
+                                elif msg == '2':
+                                    pass
+                                elif msg == '3':
+                                    pass
+                                elif msg == '0':
+                                    pass
+                                elif msg == '00':
+                                    pass
+                                elif msg == '##':
+                                    pass
+                                else:
+                                    pass
+                            # end of assessments details
                     else:
                         for key in list(session.keys()):
                             if key != '_flashes':

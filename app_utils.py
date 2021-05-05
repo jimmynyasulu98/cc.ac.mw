@@ -29,7 +29,7 @@ def get_invalid_input_message():
 
 
 def get_login_credentials_format_message():
-    return "\U0001F6AA' _Provide your login information in the following format to login. Make sure to include a " \
+    return "\U0001F6AA _Provide your login information in the following format to login. Make sure to include a " \
            "space between registration number and password._ \n\n\t\t*bsc-23-14   Ywz9FzU2* \n\n \U000026A0 *Please " \
            "make sure to delete your login credentials after finishing to prevent others from seeing them*\n\n "
 
@@ -65,12 +65,20 @@ def get_portal_home_message(session):
                          "Timetable \n\n6.\U0001F3D8 Accommodation "
 
 
+def get_portal_home_message_2(session):
+    return "Welcome  " + "*" + student_portal.get_student_name(session) + "*" + \
+           ". Please proceed by selecting an option below \n\n1.\U0001F468 My profile \n\n2.\U0001F4C3 " \
+           "Exam Results \n\n3.\U0001F4D1 Assessments \n\n4.\U0001F5C4 My courses\n\n5.\U0001F4C5 Exam Timetable " \
+           "\n\n6.\U0001F3D8 Accommodation "
+
+
 def get_back_to_cc_home_or_previous_page_message():
-    return "\n\n.0 \U00002B05 Back  \n\n.## \U00002196 Go to CC main menu \n\n Type exit or cancel to exit the session"
+    return "\n\n0. \U00002B05 Back  \n\n##. \U00002196 Go to CC main menu \n\nType exit or cancel to exit the session\n"
 
 
 def get_portal_home_or_previous_page_message():
-    return "\n\n0. \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main menu"
+    return "\n\n 0. \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main " \
+           "menu "
 
 
 # Message to be displayed when a profile option is selected
@@ -78,7 +86,7 @@ def get_profile_option_display_message(session):
     profileDisplayMessage = student_portal.get_profile_welcome_message(session)
     if profileDisplayMessage is not False:
         return profileDisplayMessage + "\n\n1. Bio data \n\n2. Academic details " \
-                                       "\n\n3.Financial details \n\n.4 Contact details \n\n"
+                                       "\n\n3.Financial details \n\n4. Contact details \n\n"
     else:
         return "\n\n1. Bio data \n\n2. Academic details " \
                "\n\n3.Financial details \n\n4. Contact details \n\n"
@@ -91,11 +99,23 @@ def get_balance_massage(session):
 
 
 def get_exam_results_option_message():
-    return "1. Current year exam results \n\n2.Previous years results"
+    return "1. Current year exam results \n\n2.Previous years results \n\n"
 
 
 def get_current_year_exam_result_message():
-    return "1. First semester exam results \n\n2.Second semester exam results"
+    return "1. First semester exam results \n\n2.Second semester exam results\n\n"
+
+
+def get_exam_not_available(semester):
+    return "\U00002757 We could not find semester {} results for you. This maybe due other problems or the results " \
+           "are not yet out\n\n".format(semester)
+
+def get_previous_exam_not_available():
+    return "\U00002757 We could not find Previous year results for you. This maybe due other problems or you did not " \
+           "register courses previously\n\n "
+
+def get_use_screen_rotation():
+    return "\U00002757\U00002757 *If the message does not fit to your device's screen please use auto rotation* \n\n"
 
 
 # Display message when assessment option is selected
@@ -108,7 +128,7 @@ def get_my_course_message():
     return "1. Current year courses \n\n 2. Previous years courses "
 
 
-def get_current_year_display_message():
+def get_current_year_courses_display_message():
     return "1. First semester courses \n\n2. Second semester courses"
 
 
