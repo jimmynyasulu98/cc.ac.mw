@@ -28,7 +28,6 @@ class LoginSession:
 
 
 def get_soup(session, url):
-
     if session is not False:
         try:
             page = session.get(url)
@@ -258,7 +257,7 @@ def get_previous_year_exam_results(session):
                     else:
                         yearResults[year].append(listOfPreviousYears[year].
                                                  find('div', class_='box').next_sibling.find('div', class_='box-body '
-                                                                                         'table-responsive no-padding'))
+                                                                                                           'table-responsive no-padding'))
 
                         # looping through the two dimensional list and yield each semester results
             for year in range(len(yearResults)):
@@ -291,42 +290,43 @@ def get_assessment_dictionary(tag):
 
 def get_assessments_details(session, semester):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/assessment/")
-    if str(semester) == "1":
-        try:
-            divs = soup.find('section', class_="content").find('div', attrs={'id': 'accordion'}).find_all('div',
-                                                                                                          class_="panel panel-default",
-                                                                                                          recursive=False)
+    if soup is not False:
+        if str(semester) == "1":
+            try:
+                divs = soup.find('section', class_="content").find('div', attrs={'id': 'accordion'}). \
+                    find_all('div', class_="panel panel-default", recursive=False)
 
-            for key in get_assessment_dictionary(divs):
-                stringRepresentation = str(key) + " "
-                for listValue in get_assessment_dictionary(divs)[key]:
-                    stringRepresentation += " \n" + str(listValue)
+                for key in get_assessment_dictionary(divs):
+                    stringRepresentation = str(key) + " "
+                    for listValue in get_assessment_dictionary(divs)[key]:
+                        stringRepresentation += " \n" + str(listValue)
 
-                yield stringRepresentation
-        except Exception as _:
-            return False
+                    yield stringRepresentation
+            except Exception as _:
+                return False
+        else:
+            try:
+                divItem = soup.find('section', class_="content").find('div', class_="panel-group") \
+                    .find('div', class_="panel-group")
+                divs = divItem.find_all('div', class_="panel panel-default", recursive=False)
+                for key in get_assessment_dictionary(divs):
+                    stringRepresentation = str(key) + " "
+                    for listValue in get_assessment_dictionary(divs)[key]:
+                        stringRepresentation += " \n" + str(listValue)
+
+                    yield stringRepresentation
+
+            except Exception as _:
+                return False
     else:
-        try:
-            divItem = soup.find('section', class_="content").find('div', class_="panel-group") \
-                .find('div', class_="panel-group")
-            divs = divItem.find_all('div', class_="panel panel-default", recursive=False)
-            for key in get_assessment_dictionary(divs):
-                stringRepresentation = str(key) + " "
-                for listValue in get_assessment_dictionary(divs)[key]:
-                    stringRepresentation += " \n" + str(listValue)
-
-                yield stringRepresentation
-
-        except Exception as _:
-            return False
+        return False
 
 
 """Scrapping students courses registration history"""
 
-
 def get_current_year_registered_courses(session, semester):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/") is not False:
+    if soup is not False:
         try:
             courses = soup.find('table', class_="table table-condensed")  # locating courses for two semesters
 

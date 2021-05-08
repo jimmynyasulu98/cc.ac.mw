@@ -94,8 +94,14 @@ def get_profile_option_display_message(session):
 
 # Display message when exam result option is selected
 def get_balance_massage(session):
-    return "\U000026D4 _Sorry you can't see your results at the moment because you have an outstanding balance of " \
-           "*MK{}*. Settle this balance first to see your results_".format(student_portal.get_student_balance(session))
+    balance = student_portal.get_student_balance(session)
+    if balance is not False:
+        return "\U000026D4 _Sorry you can't see your results at the moment because you have an outstanding balance " \
+               "of *MK{}*. Settle this balance first to see your results_".format(student_portal.
+                                                                                  get_student_balance(session))
+    else:
+        "\U000026D4 _Sorry you can't see your results at the moment because you have an outstanding balance. Settle " \
+            "the balance first to see your results_ \n\n"
 
 
 def get_exam_results_option_message():
@@ -110,9 +116,11 @@ def get_exam_not_available(semester):
     return "\U00002757 We could not find semester {} results for you. This maybe due other problems or the results " \
            "are not yet out\n\n".format(semester)
 
+
 def get_previous_exam_not_available():
     return "\U00002757 We could not find Previous year results for you. This maybe due other problems or you did not " \
            "register courses previously\n\n "
+
 
 def get_use_screen_rotation():
     return "\U00002757\U00002757 *If the message does not fit to your device's screen please use auto rotation* \n\n"
@@ -120,21 +128,37 @@ def get_use_screen_rotation():
 
 # Display message when assessment option is selected
 def get_assessment_message():
-    return "1. First semester assessments \n\n2.Second semester assessments \n\n3.User manual for continuous assessment"
+    return "1. First semester assessments \n\n2.Second semester assessments \n\n3.User manual for continuous " \
+           "assessment\n\n "
+
+
+def get_assessment_not_available_message(semester):
+    return 'We could not find semester {} assessments for you. This may be due to other problems or your lecturers ' \
+           'have not uploaded them yet \n\n'.format(semester)
 
 
 # Display message for my courses option
-def get_my_course_message():
+def get_my_courses_message():
     return "1. Current year courses \n\n 2. Previous years courses "
 
 
 def get_current_year_courses_display_message():
-    return "1. First semester courses \n\n2. Second semester courses"
+    return "1. First semester courses \n\n2. Second semester courses\n\n"
+
+
+def get_option_under_construction():
+    return "\U00002757\U00002757 Sorry this option is currently under construction \U0001F527\U0001F6E0. Please try " \
+           "later\n\n "
+
+
+def get_semester_courses_not_available(semester):
+    return 'We could not find semester {} courses for you. This may be due to other problems or you are not yet ' \
+           'registered \n\n'.format(semester)
 
 
 # Display message for accommodation option
 def get_accommodation_display_message():
-    return "1. Accommodation Rules \n\n2. Allocation History \n\n3. Booking history \n\n4. Notifications"
+    return "1. Accommodation Rules \n\n2. Allocation History \n\n3. Booking history \n\n4. Notifications\n\n"
 
 
 """ About chanco option messages"""
@@ -142,7 +166,7 @@ def get_accommodation_display_message():
 
 def get_chanco_display_message():
     return "1. Chanco at glance  \n\n2. Library \n\n3. Great hall \n\n4. Cafeteria \n\n.5 Senior commons room \n\n5. " \
-           "Junior commons room \n\n6. Chanco clinic \n\n7. Sports complex "
+           "Junior commons room \n\n6. Chanco clinic \n\n7. Sports complex \n\n"
 
 
 """About administration option messages"""
@@ -150,22 +174,22 @@ def get_chanco_display_message():
 
 # Front display message
 def get_about_administration_message():
-    return "1. Principal \n\n2. Dean of students \n\n3. Registrar \n\n5. Finance "
+    return "1. Principal \n\n2. Dean of students \n\n3. Registrar \n\n5. Finance \n\n"
 
 
 # principal option display message
 def get_principal_option_display_message():
-    return "1. Office Overview \n\n.2 Principal \n\n.3 vice principal \n\n.4 History \n\n.5 Contacts"
+    return "1. Office Overview \n\n.2 Principal \n\n.3 vice principal \n\n.4 History \n\n.5 Contacts\n\n"
 
 
 # dean of students or registrars option display message
 def get_dean_of_students_registrar_option_message():
-    return "1. Office overview \n\n2. Officers \n\n3. Contacts"
+    return "1. Office overview \n\n2. Officers \n\n3. Contacts\n\n"
 
 
 # Finance display message
 def get_finance_display_message():
-    return "1. Office overview \n\n2. Contacts"
+    return "1. Office overview \n\n2. Contacts\n\n"
 
 
 """About news and events option display messages"""
