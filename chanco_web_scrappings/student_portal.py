@@ -102,7 +102,8 @@ def get_student_balance(session):
             balance = soup.find_all('div', class_='box box-academic')[1].find('div', class_="box-body"). \
                 find('span', class_="data")
             # removing MK from the MK12.5 string type and return the float balance
-            return float(balance.text.split('K')[1])
+            balance = balance.text.split('K')[1]
+            return float(balance.replace(',', ''))
 
         except Exception as _:
             return False
@@ -323,6 +324,7 @@ def get_assessments_details(session, semester):
 
 
 """Scrapping students courses registration history"""
+
 
 def get_current_year_registered_courses(session, semester):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/courses/")
