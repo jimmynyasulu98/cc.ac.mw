@@ -72,8 +72,8 @@ def get_portal_home_message_2(session):
            "\n\n6.\U0001F3D8 Accommodation "
 
 
-def get_back_to_cc_home_or_previous_page_message():
-    return "\n\n0. \U00002B05 Back  \n\n##. \U00002196 Go to CC main menu \n\nType exit or cancel to exit the session\n"
+def get_back_to_home_page_message():
+    return "\n\n##. \U00002B05 main menu \n\n Type exit or cancel to exit the session\n"
 
 
 def get_portal_home_or_previous_page_message():
@@ -164,9 +164,9 @@ def get_accommodation_display_message():
 """ About chanco option messages"""
 
 
-def get_chanco_display_message():
-    return "1. Chanco at glance  \n\n2. Library \n\n3. Great hall \n\n4. Cafeteria \n\n.5 Senior commons room \n\n5. " \
-           "Junior commons room \n\n6. Chanco clinic \n\n7. Sports complex \n\n"
+def get_about_chanco_display_message():
+    return "1. Chanco at glance  \n\n2. Library \n\n3. Great hall \n\n4. Cafeteria \n\n.5 Senior commons room \n\n6. " \
+           "Junior commons room \n\n7. Chanco clinic \n\n8. Sports complex \n\n"
 
 
 """About administration option messages"""

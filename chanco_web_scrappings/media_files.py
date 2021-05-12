@@ -2,6 +2,7 @@
 Official website.
  """
 from chanco_web_scrappings.general_methods import *
+import base64
 
 defaultImage = "https://freepikpsd.com/wp-content/uploads/2019/10/no-image-png-5-Transparent-Images.png"
 
@@ -19,7 +20,7 @@ def get_portal_display_image(reg_number):
 
 def get_principal_image():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal/biography.html')
+        soup = get_soup('https://www.cc.ac.mw/office/principal/biography')
         return soup.find('div', class_="col-xs-3 principal").img['src']
     except Exception as _:
         return defaultImage
@@ -124,4 +125,5 @@ faculty_of_humanities_image = get_faculty_image_2('https://www.cc.ac.mw/faculty/
 dean_of_humanities_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/humanities/dean')
 
 if __name__ == "__main__":
-    print(get_registrars_image())
+    base64_message = base64.urlsafe_b64decode(get_principal_image())
+    print(base64_message)

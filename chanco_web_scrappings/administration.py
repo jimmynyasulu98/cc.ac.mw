@@ -11,7 +11,7 @@ The principal and vice principal details
 
 def get_principals_office_overview():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal.html')
+        soup = get_soup('https://www.cc.ac.mw/office/principal')
         data = soup.find('div', class_="content-case-wide").find_all('p')
         stringRepresentation = ''
         for paragraph in data:
@@ -24,7 +24,7 @@ def get_principals_office_overview():
 
 def get_principal_details():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal/biography.html')
+        soup = get_soup('https://www.cc.ac.mw/office/principal/biography')
         data = soup.find('div', class_="col-xs-7 content-inner-principal")
         return data.text
     except Exception as _:
@@ -42,7 +42,7 @@ def get_vice_principal_details():
 
 def get_principals_office_history():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal/history.html")
+        soup = get_soup("https://www.cc.ac.mw/office/principal/history")
         data = soup.find('div', attrs={"style": "padding:0 20px"})
         frontMessage = soup.find('div', attrs={"style": "margin-bottom:20px"}).text
         dataList = []
@@ -62,7 +62,7 @@ def get_principals_office_history():
 
 def get_principal_contact_details():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal/contact.html")
+        soup = get_soup("https://www.cc.ac.mw/office/principal/contact")
         data = soup.find('div', class_="col-xs-6").find_all('div', class_="row office-contact", recursive=False)
         workingHours = soup.find('div', class_="col-xs-4").find_all('div', class_="row office-contact", recursive=False)
         stringRepresentation = ''
@@ -217,4 +217,4 @@ def get_finance_office_contact_details():
 
 
 if __name__ == "__main__":
-    print(get_finance_office_contact_details())
+    print(get_principals_office_overview())

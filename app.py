@@ -5,7 +5,7 @@ import app_utils
 import requests
 from serialiser import *
 
-SECRET_KEY = 'a secret key'
+SECRET_KEY = 'a secret ke'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -26,10 +26,10 @@ def sms_reply():
         if session['key1'] == '':
 
             if msg == '1':
-                resp.message('Welcome to chanco about')
+                resp.message(app_utils.get_about_chanco_display_message())
                 session['key1'] = '1'
             elif msg == '2':
-                resp.message('Administration')
+                resp.message(app_utils.get_about_administration_message())
                 session['key1'] = '2'
             elif msg == '3':
                 resp.message('Departments')
@@ -54,12 +54,78 @@ def sms_reply():
         else:
             # Start of About chanco services
             if session['key1'] == '1':
-                pass
+                if msg == '1':
+                    resp.message(about.get_chanco_at_glance()).media(media_files.about_great_hall_image)
+                elif msg == '2':
+                    resp.message(about.get_about_library())
+                    resp.message().media(media_files.about_library_image)
+                elif msg == '3':
+                    resp.message(about.get_about_the_great_hall())
+                    resp.message().media(media_files.about_great_hall_image)
+                elif msg == '4':
+                    resp.message(about.get_about_cafeteria()).media(media_files.about_cafeteria_image)
+                elif msg == '5':
+                    resp.message(about.get_about_senior_common_room()).media(media_files.about_senior_commons_room)
+                elif msg == '6':
+                    resp.message(about.get_about_junior_common_room()).media(
+                        media_files.about_junior_commons_room_image)
+                elif msg == '7':
+                    resp.message(about.get_about_clinic()).media(media_files.about_clinic_image)
+                elif msg == '8':
+                    mes = about.get_about_sports_complex()
+                    resp.message(mes).media('https://www.cc.ac.mw/images/complex/complex3.jpg')
+                elif msg == "##":
+                    for key in list(session.keys()):
+                        if key != '_flashes':
+                            session.pop(key)
+                    session['key1'] = ''
+                    counter += 1
+                    session['counter'] = counter
+                    resp.message(app_utils.get_welcoming_message())
+                elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                    for key in list(session.keys()):
+                        session.pop(key)
+                else:
+                    resp.message(app_utils.get_invalid_input_message())
+                    resp.message(app_utils.get_about_chanco_display_message())
             # End of about chanco services
 
             # Start of administration services
             elif session['key1'] == '2':
-                pass
+                if session['key2'] == '':
+                    if msg == '1':
+                        resp.message(app_utils.get_principal_option_display_message())
+                        session['key2'] = '1'
+                    elif msg == '2':
+                        resp.message(app_utils.get_dean_of_students_registrar_option_message())
+                        session['key2'] = '2'
+                    elif msg == '3':
+                        resp.message(app_utils.get_principal_option_display_message())
+                        session['key2'] = '3'
+                    elif msg == '4':
+                        resp.message(app_utils.get_principal_option_display_message())
+                        session['key2'] = '1'
+                    else:
+                        resp.message(app_utils.get_invalid_input_message()+app_utils.get_about_administration_message())
+                else:
+                    if session['key2'] == '1':
+                        if msg == '1':
+                            resp.message(administration.get_principals_office_overview())
+                            resp.message('image').media(media_files.get_principal_image())
+                        elif msg == '1':
+                            pass
+                        elif msg == '1':
+                            pass
+                        elif msg == '1':
+                            pass
+                        elif msg == '1':
+                            pass
+                    elif session['key2'] == '2':
+                        pass
+                    elif session['key2'] == '3':
+                        pass
+                    else :
+                        pass
             # End of administration services
 
             # Start of department services

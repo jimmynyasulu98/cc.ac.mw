@@ -7,7 +7,7 @@ import itertools
 
 def get_chanco_at_glance():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/about/chanco-at-a-glance.html")
+        soup = get_soup("https://www.cc.ac.mw/about/chanco-at-a-glance")
         data_chanco_at_glance = soup.find("div", class_="content-case about").find_all('p')
         data_guide = soup.find('div', attrs={'id': 'right_column'}).find('div', class_="holder").find_all('p')
 
@@ -18,9 +18,10 @@ def get_chanco_at_glance():
         data_chanco_at_glance.pop(11)
         for paragraph1, paragraph2 in itertools.zip_longest(data_chanco_at_glance, data_guide):
             if paragraph1 is not None:
-                stringRepresentation1 += paragraph1.text + "\n\n"
+                if len(stringRepresentation1) <= 1155:
+                    stringRepresentation1 += paragraph1.text + "\n"
             if paragraph2 is not None:
-                stringRepresentation2 += paragraph2.text + "\n\n"
+                stringRepresentation2 += paragraph2.text + "\n"
         return "{} {}".format(stringRepresentation1, stringRepresentation2)
 
     except Exception as _:
@@ -33,7 +34,7 @@ def get_chanco_at_glance():
 # About Chancellor college library
 def get_about_library():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/library.html')
+        soup = get_soup('https://www.cc.ac.mw/library')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -95,7 +96,7 @@ def get_about_library():
 # About Chancellor college the great hall
 def get_about_the_great_hall():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/great-hall.html')
+        soup = get_soup('https://www.cc.ac.mw/great-hall')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -115,7 +116,7 @@ def get_about_the_great_hall():
 # About Chancellor college cafeteria
 def get_about_cafeteria():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/cafetaria.html')
+        soup = get_soup('https://www.cc.ac.mw/cafetaria')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -135,7 +136,7 @@ def get_about_cafeteria():
 # About Chancellor college Senior Common Room
 def get_about_senior_common_room():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/senior-common-room.html')
+        soup = get_soup('https://www.cc.ac.mw/senior-common-room')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -156,7 +157,7 @@ def get_about_senior_common_room():
 def get_about_junior_common_room():
 
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/junior-common-room.html')
+        soup = get_soup('https://www.cc.ac.mw/junior-common-room')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -176,7 +177,7 @@ def get_about_junior_common_room():
 # About Chancellor college clinic
 def get_about_clinic():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/clinic.html')
+        soup = get_soup('https://www.cc.ac.mw/clinic')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -195,7 +196,7 @@ def get_about_clinic():
 # About Chancellor college sports complex
 def get_about_sports_complex():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/sports-complex.html')
+        soup = get_soup('https://www.cc.ac.mw/sports-complex')
         info = soup.find('div', class_="content-inner-wide")
         itemList = []
         for item in info.text.split('\n'):
@@ -227,4 +228,4 @@ def get_about_chanco_nbs():
 
 
 if __name__ == "__main__":
-    print(get_about_sports_complex())
+    print(get_chanco_at_glance())

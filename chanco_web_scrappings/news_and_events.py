@@ -71,13 +71,13 @@ def get_events():
 # crapping vacancies
 def get_vacancies():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/vacancies.html")
+        soup = get_soup("http://127.0.0.1:8011/www.cc.ac.mw/vacancies.html")
         vacancies = soup.find('div', class_="col-xs-12").find_all('a')
 
         # crap link for each vacancy and visit its page for more details
         for item in vacancies:
             eventLink = item['href']
-            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}".format(eventLink))
+            soup_1 = get_soup("http://127.0.0.1:8011/www.cc.ac.mw/{}".format(eventLink))
 
             vacancyHeading = soup_1.find('div', class_="col-xs-11").h3
             vacancyDetails = ''
@@ -97,8 +97,8 @@ def get_vacancies():
                 if index % 2 == 0:  # making sure two items exist in a single row
                     vacancyDetails += '\n'
 
-            yield '{}{}{}'.format('*' + vacancyHeading.text + '*\n\n', vacancyDetails + '\n\n',
-                                  vacancyBody.text.strip())  # yield a tuple
+            yield len('{}{}{}'.format('*' + vacancyHeading.text + '*\n\n', vacancyDetails + '\n\n',
+                                  vacancyBody.text))  # yield a tuple
 
     except Exception as _:
 
@@ -107,5 +107,11 @@ def get_vacancies():
 
 if __name__ == "__main__":
     news = get_vacancies()
+    print(next(news))
+    print(next(news))
+    print(next(news))
+    print(next(news))
+    print(next(news))
+    print(next(news))
     print(next(news))
     print(next(news))
