@@ -77,11 +77,11 @@ class Faculty:
 
             for rowItem, workingHoursRow in itertools.zip_longest(data, workingHours):
                 row = rowItem.find_all('div', class_='row')
-                stringRepresentation += '*' + row[0].text + '*' + '\n ' + row[1].text.replace('\t', ''.strip()) + '\n'
+                stringRepresentation += '*'+row[0].text.strip()+'*' + row[1].text.replace('\t', ''.strip())
 
                 if workingHoursRow is not None:
                     row_1 = workingHoursRow.find_all('div', class_='row')
-                    workingHoursStringRepresentation += '*' + row_1[0].text + '*' + '\n ' + row_1[1].text + '\n\n'
+                    workingHoursStringRepresentation += '*'+row_1[0].text+'*' + '\n ' + row_1[1].text + '\n\n'
 
             return "{}{}".format(stringRepresentation, workingHoursStringRepresentation)
 
@@ -99,23 +99,26 @@ def get_faculty_of_science_overview():
     if faculty_of_science.get_overview() is not False:
         paragraph = faculty_of_science.get_overview().find_all('p')
         # formatting the string in a form to be displayed to user
-        background = paragraph[0].text+'\n'
+        background = paragraph[0].text + '\n'
         staff = paragraph[1].text + '\n'
-        centers = paragraph[2].text+'\n'
-        publication = paragraph[3].text+'\n'
-        collaborations = paragraph[4].text+'\n'
+        centers = paragraph[2].text + '\n'
+        publication = paragraph[3].text + '\n'
+        collaborations = paragraph[4].text + '\n'
 
-        return '{}{}{}{}{}'.format('\t\t*Background*\n ' + background, '\t\t*Staff*\n' + staff,
-                                   '\t\t*Centers*\n' + centers,
-                                   '\t\t*Publications*\n' + publication,
-                                   '\t\t*Collaborations*\n' + collaborations)
+        return '{}{}{}'.format('\t\t*Background*\n ' + background, '\t\t*Staff*\n' + staff,
+                               '\t\t*Centers*\n' + centers + '.. for more visit cc.ac.mw')
+
     else:
         return False
 
 
 def get_faculty_of_science_dean_details():
     if faculty_of_science.get_faculty_dean_details() is not False:
-        return faculty_of_science.get_faculty_dean_details().text
+        stringRepresentation = ''
+        for word in faculty_of_science.get_faculty_dean_details().text.split(' '):
+            if len(stringRepresentation) < 1520:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more visit https://www.cc.ac.mw/faculty/science/dean'
     else:
         return False
 
@@ -144,7 +147,7 @@ def get_faculty_of_law_overview():
         paragraph = faculty_of_law.get_overview().find_all('p')
         # formatting the string in a form to be displayed to user
         mission = paragraph[0].text
-        focus = paragraph[1].text + '\n' + paragraph[2].text
+        focus = paragraph[1].text
         departments = paragraph[3].text
         staffValues = paragraph[4].text
 
@@ -158,7 +161,12 @@ def get_faculty_of_law_overview():
 
 def get_faculty_of_law_dean_details():
     if faculty_of_law.get_faculty_dean_details() is not False:
-        return faculty_of_law.get_faculty_dean_details().text
+        stringRepresentation = ''
+        for word in faculty_of_law.get_faculty_dean_details().text.split(' '):
+            if len(stringRepresentation) < 1520:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more https://www.cc.ac.mw/faculty/law/dean'
+
     else:
         return False
 
@@ -191,15 +199,16 @@ def get_faculty_of_education_overview():
         unorderedListString = ''
         for listValue in unorderedLists[1].find_all('li'):
             unorderedListString += listValue.text + '\n'
-
-        background = paragraphs[0].text
+        background = ''
+        for word in paragraphs[0].text.split(' '):
+            if len(background) < 720:
+                background += word + ' '
         departments = paragraphs[1].text + '\n' + unorderedLists[0].text
         partnerships = paragraphs[2].text + '\n' + paragraphs[3].text
         postgraduate_programs = paragraphs[4].text + '\n' + unorderedListString
 
-        return '{}{}{}{}'.format('\t\t*Background*\n ' + background + '\n', '\t\t*Departments*\n' + departments + '\n',
-                                 '\t\t*Partnerships*\n' + partnerships + '\n', '\t\t*Postgraduate Programs*\n'
-                                 + postgraduate_programs + '\n')
+        return '{}{}{}'.format('\t\t*Background*\n ' + background + '\n', '\t\t*Departments*\n' + departments + '\n',
+                               '\t\t*Postgraduate Programs*\n' + postgraduate_programs + '\n')
 
     else:
         return False
@@ -207,7 +216,11 @@ def get_faculty_of_education_overview():
 
 def get_faculty_of_education_dean_details():
     if faculty_of_education.get_faculty_dean_details() is not False:
-        return faculty_of_education.get_faculty_dean_details().text
+        stringRepresentation = ''
+        for word in faculty_of_education.get_faculty_dean_details().text.split(' '):
+            if len(stringRepresentation) < 1520:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more visit https://www.cc.ac.mw/faculty/education/dean'
     else:
         return False
 
@@ -237,17 +250,26 @@ def get_faculty_of_social_science_overview():
         mission = paragraph[0].text
         departments = paragraph[1].text
         centers = paragraph[2].text
-        focus = paragraph[3].text
+        focus = ''
+        for word in paragraph[3].text.split(' '):
+            if len(focus) < 600:
+                focus += word + ' '
 
         return '{}{}{}{}'.format('\t\t*Mission*\n ' + mission + '\n', '\t\t*Departments*\n' + departments + '\n',
-                                 '\t\t*Centers*\n' + centers + '\n', '\t\t*Focus*\n' + focus + '\n')
+                                 '\t\t*Centers*\n' + centers + '\n', '\t\t*Focus*\n' + focus +
+                                 '.. Visit cc.ac.mw for more details' '\n')
     else:
         return False
 
 
 def get_faculty_of_social_science_dean_details():
     if faculty_of_social_science.get_faculty_dean_details() is not False:
-        return faculty_of_social_science.get_faculty_dean_details().text
+        stringRepresentation = ''
+        for line in faculty_of_social_science.get_faculty_dean_details().text.split(" "):
+            if len(stringRepresentation) < 1564:
+                stringRepresentation += line + ' '
+
+        return stringRepresentation + '.. Visit cc.ac.mw for more details'
     else:
         return False
 
@@ -332,6 +354,4 @@ def get_faculty_of_humanities_contact_details():
         return "{}{}".format(stringRepresentation, workingHoursStringRepresentation)
     except Exception as _:
         return False
-
-
 

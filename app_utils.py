@@ -54,7 +54,7 @@ def get_login_unsuccessful_message():
 
 
 def get_could_not_fetch_message():
-    return "\U0001F613 _Sorry we could not fetch the information you requested at the moment. Please try again later_ "
+    return "\U00002757 _Sorry we could not find the information you requested at the moment. Please try again later_ "
 
 
 def get_portal_home_message(session):
@@ -75,6 +75,8 @@ def get_portal_home_message_2(session):
 def get_back_to_home_page_message():
     return "\n\n##. \U00002B05 main menu \n\n Type exit or cancel to exit the session\n"
 
+def get_good_bye_message():
+    return '\U0001F64B Good bye! Type *hie* or any other message to start a new session'
 
 def get_portal_home_or_previous_page_message():
     return "\n\n 0. \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main " \
@@ -210,4 +212,4 @@ def get_about_faculties_display_message():
 
 # faculty display message
 def get_faculty_display_message():
-    return "1. Faculty overview \n\n2. Faculty dean details \n\n3. Faculty departments \n\n4. Faculty contacts"
+    return "1. Faculty overview \n\n2. Faculty dean  \n\n3. Faculty departments \n\n4. Faculty contacts"

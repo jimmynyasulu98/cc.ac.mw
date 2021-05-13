@@ -26,16 +26,25 @@ def get_principal_details():
     try:
         soup = get_soup('https://www.cc.ac.mw/office/principal/biography')
         data = soup.find('div', class_="col-xs-7 content-inner-principal")
-        return data.text
+        stringRepresentation = ''
+        for word in data.text.split(' '):
+            if len(stringRepresentation) < 1530:
+                stringRepresentation += word + ' '
+        return stringRepresentation + 'for more visit https://www.cc.ac.mw/office/principal/biography'
+
     except Exception as _:
         return False
 
 
 def get_vice_principal_details():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/principal/biography-vice.html')
+        soup = get_soup('https://www.cc.ac.mw/office/principal/biography-vice')
         data = soup.find('div', class_="col-xs-7 content-inner-principal")
-        return data.text
+        stringRepresentation = ''
+        for word in data.text.split(' '):
+            if len(stringRepresentation) < 1520:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more visit https://www.cc.ac.mw/office/principal/biography-vice'
     except Exception as _:
         return False
 
@@ -86,12 +95,16 @@ def get_principal_contact_details():
 
 def get_dean_of_students_office_overview():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/dean-of-students.html")
+        soup = get_soup("https://www.cc.ac.mw/office/dean-of-students")
         paragraphs = soup.find('div', class_="content-inner-wide").find_all('p')
-        stringRepresentation = ''
+        overview = ''
         for paragraph in paragraphs:
-            stringRepresentation += paragraph.text + '\n\n'
-        return stringRepresentation
+            overview += paragraph.text + '\n'
+        stringRepresentation = ''
+        for word in overview.split(' '):
+            if len(stringRepresentation) < 1520:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more visit https://www.cc.ac.mw/office/dean-of-students'
 
     except Exception as _:
         return False
@@ -99,7 +112,7 @@ def get_dean_of_students_office_overview():
 
 def get_dean_of_students_details():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/dean-of-students/staff.html')
+        soup = get_soup('https://www.cc.ac.mw/office/dean-of-students/staff')
         paragraphs = soup.find('div', class_="col-xs-7 content-inner-principal").find_all('p')
         stringRepresentation = ''
         for paragraph in paragraphs:
@@ -112,7 +125,7 @@ def get_dean_of_students_details():
 
 def get_dean_of_students_contact_details():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/dean-of-students/contact.html")
+        soup = get_soup("https://www.cc.ac.mw/office/dean-of-students/contact")
         data = soup.find('div', class_="col-xs-6").find_all('div', class_="row office-contact", recursive=False)
         workingHours = soup.find('div', class_="col-xs-4").find_all('div', class_="row office-contact", recursive=False)
         stringRepresentation = ''
@@ -137,16 +150,21 @@ def get_dean_of_students_contact_details():
 
 def get_registrars_office_overview():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/registrar.html")
+        soup = get_soup("https://www.cc.ac.mw/office/registrar")
         overviewMessage = soup.find('div', class_="content-inner-wide")
-        return overviewMessage.text
+        stringRepresentation = ''
+        for word in overviewMessage.text.split(' '):
+            if len(stringRepresentation) < 1530:
+                stringRepresentation += word + ' '
+        return stringRepresentation + '..for more visit https://www.cc.ac.mw/office/registrar'
+
     except Exception as _:
         return False
 
 
 def get_registrars_details():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/registrar/staff.html')
+        soup = get_soup('https://www.cc.ac.mw/office/registrar/staff')
         paragraphs = soup.find('div', class_="col-xs-7 content-inner-principal").find_all('p')
         stringRepresentation = ''
         for paragraph in paragraphs:
@@ -159,7 +177,7 @@ def get_registrars_details():
 
 def get_registrars_contact_details():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/registrar/contact.html")
+        soup = get_soup("https://www.cc.ac.mw/office/registrar/contact")
         data = soup.find('div', class_="col-xs-6").find_all('div', class_="row office-contact", recursive=False)
         workingHours = soup.find('div', class_="col-xs-4").find_all('div', class_="row office-contact", recursive=False)
         stringRepresentation = ''
@@ -184,7 +202,7 @@ def get_registrars_contact_details():
 
 def get_finance_office_details():
     try:
-        soup = get_soup('http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/finance.html')
+        soup = get_soup('https://www.cc.ac.mw/office/finance')
         paragraphs = soup.find('div', class_="content-inner-wide").find_all('p')
         stringRepresentation = ''
         for paragraph in paragraphs:
@@ -196,7 +214,7 @@ def get_finance_office_details():
 
 def get_finance_office_contact_details():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/office/finance/contact.html")
+        soup = get_soup("https://www.cc.ac.mw/office/finance/contact")
         data = soup.find('div', class_="col-xs-6").find_all('div', class_="row office-contact", recursive=False)
         workingHours = soup.find('div', class_="col-xs-4").find_all('div', class_="row office-contact", recursive=False)
         stringRepresentation = ''
@@ -215,6 +233,3 @@ def get_finance_office_contact_details():
     except Exception as _:
         return False
 
-
-if __name__ == "__main__":
-    print(get_principals_office_overview())

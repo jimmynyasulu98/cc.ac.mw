@@ -125,5 +125,5 @@ faculty_of_humanities_image = get_faculty_image_2('https://www.cc.ac.mw/faculty/
 dean_of_humanities_image = get_dean_of_faculty_image('https://www.cc.ac.mw/faculty/humanities/dean')
 
 if __name__ == "__main__":
-    base64_message = base64.urlsafe_b64decode(get_principal_image())
-    print(base64_message)
+
+    print(faculty_of_science_image)

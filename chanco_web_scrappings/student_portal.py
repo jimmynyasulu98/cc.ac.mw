@@ -97,7 +97,7 @@ def get_student_registration_number(session):
 
 def get_student_balance(session):
     soup = get_soup(session, 'https://portal.cc.ac.mw/students/pages/profile/')
-    if get_soup(session, 'https://portal.cc.ac.mw/students/pages/profile/') is not False:
+    if soup is not False:
         try:
             balance = soup.find_all('div', class_='box box-academic')[1].find('div', class_="box-body"). \
                 find('span', class_="data")
