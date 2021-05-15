@@ -34,7 +34,7 @@ def sms_reply():
                 resp.message(app_utils.get_about_administration_message())
                 session['key1'] = '2'
             elif msg == '3':
-                resp.message(departments.get_departments()+ app_utils.get_courses_on_departments_message())
+                resp.message(departments.get_departments() + app_utils.get_courses_on_departments_message())
                 resp.message(app_utils.get_back_to_home_page_message())
                 session['key1'] = '3'
             elif msg == '4':
@@ -47,7 +47,7 @@ def sms_reply():
                 resp.message(app_utils.get_login_credentials_format_message())
                 session['key1'] = '6'
             elif msg == '7':
-                resp.message('Others')
+                resp.message(app_utils.get_about_others_message())
                 session['key1'] = '7'
             else:
                 resp.message(app_utils.get_invalid_input_message() + app_utils.get_welcoming_message())
@@ -168,20 +168,41 @@ def sms_reply():
                 else:
                     if session['key2'] == '1':
                         if msg == '1':
-                            resp.message(administration.get_principals_office_overview())
+                            overview = administration.get_principals_office_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_principal_details() )
+                            principal = administration.get_principal_details()
+                            if principal is not False:
+                                resp.message(principal)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
-                            resp.message(administration.get_vice_principal_details())
+                            vicePrincipal = administration.get_vice_principal_details()
+                            if vicePrincipal is not False:
+                                resp.message(vicePrincipal)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '4':
-                            resp.message(administration.get_principals_office_history() +
-                                         app_utils.get_back_to_home_page_message())
+                            history = administration.get_principals_office_history()
+                            if history is not False:
+                                resp.message(history + app_utils.get_back_to_home_page_message())
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message() +
+                                             app_utils.get_back_to_home_page_message())
                         elif msg == '5':
-                            resp.message(administration.get_principal_contact_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            contacts = administration.get_principal_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts + app_utils.get_back_to_home_page_message())
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message() +
+                                             app_utils.get_back_to_home_page_message())
+
                         elif msg == "##":
                             for key in list(session.keys()):
                                 if key != '_flashes':
@@ -200,14 +221,27 @@ def sms_reply():
 
                     elif session['key2'] == '2':
                         if msg == '1':
-                            resp.message(administration.get_dean_of_students_office_overview())
+                            overview = administration.get_dean_of_students_office_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_dean_of_students_details())
+                            deanDetails = administration.get_dean_of_students_details()
+                            if deanDetails is not False:
+                                resp.message(deanDetails)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
-                            resp.message(administration.get_dean_of_students_contact_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            contacts = administration.get_dean_of_students_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts + app_utils.get_back_to_home_page_message())
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message() +
+                                             app_utils.get_back_to_home_page_message())
+
                         elif msg == "##":
                             for key in list(session.keys()):
                                 if key != '_flashes':
@@ -227,14 +261,26 @@ def sms_reply():
                                 app_utils.get_dean_of_students_registrar_option_message())
                     elif session['key2'] == '3':
                         if msg == '1':
-                            resp.message(administration.get_registrars_office_overview())
+                            overview = administration.get_registrars_office_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_registrars_details())
+                            registrarsDetails = administration.get_registrars_details()
+                            if registrarsDetails is not False:
+                                resp.message(registrarsDetails)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
-                            resp.message(administration.get_registrars_contact_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            contacts = administration.get_registrars_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts + app_utils.get_back_to_home_page_message())
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message() +
+                                             app_utils.get_back_to_home_page_message())
                         elif msg == "##":
                             for key in list(session.keys()):
                                 if key != '_flashes':
@@ -252,11 +298,19 @@ def sms_reply():
                                          app_utils.get_dean_of_students_registrar_option_message())
                     else:
                         if msg == '1':
-                            resp.message(administration.get_finance_office_details())
+                            finance = administration.get_finance_office_details()
+                            if finance is not False:
+                                resp.message(finance)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
                             resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_finance_office_contact_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            contacts = administration.get_finance_office_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts + app_utils.get_back_to_home_page_message())
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message()
+                                             + app_utils.get_back_to_home_page_message())
                         elif msg == "##":
                             for key in list(session.keys()):
                                 if key != '_flashes':
@@ -611,8 +665,8 @@ def sms_reply():
                         session.pop(key)
                     resp.message(app_utils.get_good_bye_message())
                 else:
-                    resp.message(app_utils.get_invalid_input_message()+
-                                 app_utils.get_about_news_and_events_display_message() )
+                    resp.message(app_utils.get_invalid_input_message() +
+                                 app_utils.get_about_news_and_events_display_message())
 
             # End of news and Events services
 
@@ -999,7 +1053,8 @@ def sms_reply():
                     if prospectusLink is not False:
                         resp.message().media(prospectusLink)
                     else:
-                        resp.message(app_utils.get_could_not_fetch_message()+app_utils.get_back_to_home_page_message())
+                        resp.message(
+                            app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
                 elif msg == '2':
                     programs = others.get_masters_degree_programs()
                     if programs is not False:
@@ -1037,7 +1092,7 @@ def sms_reply():
                         session.pop(key)
                     resp.message(app_utils.get_good_bye_message())
                 else:
-                    resp.message(app_utils.get_invalid_input_message()+ app_utils.get_about_others_message() )
+                    resp.message(app_utils.get_invalid_input_message() + app_utils.get_about_others_message())
             # end of others option services
 
         return str(resp)
