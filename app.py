@@ -4,8 +4,10 @@ from chanco_web_scrappings import *
 import app_utils
 import requests
 from serialiser import *
+import os
 
 SECRET_KEY = 'a secret key'
+# SECRET_KEY = os.urandom(16)
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -32,13 +34,14 @@ def sms_reply():
                 resp.message(app_utils.get_about_administration_message())
                 session['key1'] = '2'
             elif msg == '3':
-                resp.message('Departments')
+                resp.message(departments.get_departments()+ app_utils.get_courses_on_departments_message())
+                resp.message(app_utils.get_back_to_home_page_message())
                 session['key1'] = '3'
             elif msg == '4':
                 resp.message(app_utils.get_about_faculties_display_message())
                 session['key1'] = '4'
             elif msg == '5':
-                resp.message('News and events')
+                resp.message(app_utils.get_about_news_and_events_display_message())
                 session['key1'] = '5'
             elif msg == '6':
                 resp.message(app_utils.get_login_credentials_format_message())
@@ -47,7 +50,7 @@ def sms_reply():
                 resp.message('Others')
                 session['key1'] = '7'
             else:
-                resp.message(str(app_utils.get_invalid_input_message()) + str(app_utils.get_welcoming_message()))
+                resp.message(app_utils.get_invalid_input_message() + app_utils.get_welcoming_message())
             session['key2'] = ''
             return str(resp)
 
@@ -165,14 +168,14 @@ def sms_reply():
                 else:
                     if session['key2'] == '1':
                         if msg == '1':
-                            resp.message(administration.get_principals_office_overview() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_principals_office_overview())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_principal_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_principal_details() )
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
-                            resp.message(administration.get_vice_principal_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_vice_principal_details())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '4':
                             resp.message(administration.get_principals_office_history() +
                                          app_utils.get_back_to_home_page_message())
@@ -197,11 +200,11 @@ def sms_reply():
 
                     elif session['key2'] == '2':
                         if msg == '1':
-                            resp.message(administration.get_dean_of_students_office_overview() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_dean_of_students_office_overview())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_dean_of_students_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_dean_of_students_details())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
                             resp.message(administration.get_dean_of_students_contact_details() +
                                          app_utils.get_back_to_home_page_message())
@@ -224,11 +227,11 @@ def sms_reply():
                                 app_utils.get_dean_of_students_registrar_option_message())
                     elif session['key2'] == '3':
                         if msg == '1':
-                            resp.message(administration.get_registrars_office_overview() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_registrars_office_overview())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
-                            resp.message(administration.get_registrars_contact_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_registrars_details())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '3':
                             resp.message(administration.get_registrars_contact_details() +
                                          app_utils.get_back_to_home_page_message())
@@ -249,8 +252,8 @@ def sms_reply():
                                          app_utils.get_dean_of_students_registrar_option_message())
                     else:
                         if msg == '1':
-                            resp.message(administration.get_finance_office_details() +
-                                         app_utils.get_back_to_home_page_message())
+                            resp.message(administration.get_finance_office_details())
+                            resp.message(app_utils.get_back_to_home_page_message())
                         elif msg == '2':
                             resp.message(administration.get_finance_office_contact_details() +
                                          app_utils.get_back_to_home_page_message())
@@ -273,7 +276,19 @@ def sms_reply():
 
             # Start of department services
             elif session['key1'] == '3':
-                pass
+                if msg == "##":
+                    for key in list(session.keys()):
+                        if key != '_flashes':
+                            session.pop(key)
+                    session['key1'] = ''
+                    counter += 1
+                    session['counter'] = counter
+                    resp.message(app_utils.get_welcoming_message())
+
+                elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                    for key in list(session.keys()):
+                        session.pop(key)
+                    resp.message(app_utils.get_good_bye_message())
             # End of Department services
 
             # start of faculties services
@@ -294,10 +309,27 @@ def sms_reply():
                     elif msg == '5':
                         resp.message(app_utils.get_faculty_display_message())
                         session['key2'] = '4'
+                    elif msg == '0':
+                        resp.message(app_utils.get_about_faculties_display_message())
+                    elif msg == "##":
+                        for key in list(session.keys()):
+                            if key != '_flashes':
+                                session.pop(key)
+                        session['key1'] = ''
+                        counter += 1
+                        session['counter'] = counter
+                        resp.message(app_utils.get_welcoming_message())
+
+                    elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                        for key in list(session.keys()):
+                            session.pop(key)
+                        resp.message(app_utils.get_good_bye_message())
+
                     else:
                         resp.message(
                             app_utils.get_invalid_input_message() + app_utils.get_about_faculties_display_message())
                 else:
+                    # faculty of science
                     if session['key2'] == '1':
                         if msg == '1':
                             overview = faculties.get_faculty_of_science_overview()
@@ -305,6 +337,9 @@ def sms_reply():
                                 resp.message(overview)
                             else:
                                 resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
 
                         elif msg == '2':
                             details, imageLink = faculties.get_faculty_of_science_dean_details(), \
@@ -313,30 +348,272 @@ def sms_reply():
                                 resp.message(details).media(imageLink)
                             else:
                                 resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
                         elif msg == '3':
                             department = faculties.get_faculty_of_science_departments()
                             if department is not False:
                                 resp.message(department)
                             else:
                                 resp.message(app_utils.get_could_not_fetch_message())
-                                
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
                         elif msg == '4':
                             contacts = faculties.get_faculty_of_science_contact_details()
                             if contacts is not False:
                                 resp.message(contacts)
                             else:
                                 resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
                         else:
                             resp.message(
                                 app_utils.get_invalid_input_message() + app_utils.get_faculty_display_message())
-
+                    # faculty of law
                     elif session['key2'] == '2':
-                        pass
+                        if msg == '1':
+                            overview = faculties.get_faculty_of_law_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '2':
+                            details, imageLink = faculties.get_faculty_of_law_dean_details(), \
+                                                 media_files.dean_of_law_image
+                            if details is not False and imageLink is not False:
+                                resp.message(details).media(imageLink)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '3':
+                            department = faculties.get_faculty_of_law_departments()
+                            if department is not False:
+                                resp.message(department)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '4':
+                            contacts = faculties.get_faculty_of_law_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+                        else:
+                            resp.message(
+                                app_utils.get_invalid_input_message() + app_utils.get_faculty_display_message())
+                    # faculty of education
+                    elif session['key2'] == '3':
+                        if msg == '1':
+                            overview = faculties.get_faculty_of_education_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '2':
+                            details, imageLink = faculties.get_faculty_of_education_dean_details(), \
+                                                 media_files.dean_of_education_image
+                            if details is not False and imageLink is not False:
+                                resp.message(details).media(imageLink)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '3':
+                            department = faculties.get_faculty_of_education_departments()
+                            if department is not False:
+                                resp.message(department)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '4':
+                            contacts = faculties.get_faculty_of_education_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+                        else:
+                            resp.message(
+                                app_utils.get_invalid_input_message() + app_utils.get_faculty_display_message())
+                    # faculty of social science
+                    elif session['key2'] == '4':
+                        if msg == '1':
+                            overview = faculties.get_faculty_of_social_science_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '2':
+                            details, imageLink = faculties.get_faculty_of_social_science_dean_details(), \
+                                                 media_files.dean_of_social_science_image
+                            if details is not False and imageLink is not False:
+                                resp.message(details).media(imageLink)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '3':
+                            department = faculties.get_faculty_of_social_science_departments()
+                            if department is not False:
+                                resp.message(department)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '4':
+                            contacts = faculties.get_faculty_of_social_science_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+                        else:
+                            resp.message(
+                                app_utils.get_invalid_input_message() + app_utils.get_faculty_display_message())
+                    # faculty of humanities
+                    else:
+                        if msg == '1':
+                            overview = faculties.get_faculty_of_humanities_overview()
+                            if overview is not False:
+                                resp.message(overview)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '2':
+                            details, imageLink = faculties.get_faculty_of_humanities_dean_details(), \
+                                                 media_files.dean_of_humanities_image
+                            if details is not False and imageLink is not False:
+                                resp.message(details).media(imageLink)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '3':
+                            department = faculties.get_faculty_of_humanities_departments()
+                            if department is not False:
+                                resp.message(department)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+
+                        elif msg == '4':
+                            contacts = faculties.get_faculty_of_humanities_contact_details()
+                            if contacts is not False:
+                                resp.message(contacts)
+                            else:
+                                resp.message(app_utils.get_could_not_fetch_message())
+                            resp.message(app_utils.get_back_to_home_of_previous_message())
+                            session.pop('key2')
+                            session['key2'] = ''
+                        else:
+                            resp.message(
+                                app_utils.get_invalid_input_message() + app_utils.get_faculty_display_message())
             # End of faculties services
 
             # Start news and Events services
             elif session['key1'] == '5':
-                pass
+                if msg == '1':
+                    news = news_and_events.get_news()
+                    numOfItems = 0
+                    for newsItem in news:
+                        numOfItems += 1
+                        resp.message(newsItem)
+                    if numOfItems <= 0:
+                        resp.message(app_utils.get_could_not_fetch_message())
+                    resp.message(app_utils.get_back_to_home_of_previous_message())
+
+                elif msg == '2':
+                    articles = news_and_events.get_articles()
+                    numOfItems = 0
+                    for articleItem in articles:
+                        numOfItems += 1
+                        resp.message(articleItem)
+                    if numOfItems <= 0:
+                        resp.message(app_utils.get_could_not_fetch_message())
+                    resp.message(app_utils.get_back_to_home_of_previous_message())
+                elif msg == '3':
+                    events = news_and_events.get_events()
+                    numOfItems = 0
+                    for eventsItem in events:
+                        numOfItems += 1
+                        resp.message(eventsItem)
+                    if numOfItems <= 0:
+                        resp.message(app_utils.get_could_not_fetch_message())
+                    resp.message(app_utils.get_back_to_home_of_previous_message())
+                elif msg == '4':
+                    vacancies = news_and_events.get_vacancies()
+                    numOfItems = 0
+                    for vacancyItem in vacancies:
+                        numOfItems += 1
+                        resp.message(vacancyItem)
+                    if numOfItems <= 0:
+                        resp.message(app_utils.get_could_not_fetch_message())
+                    resp.message(app_utils.get_back_to_home_of_previous_message())
+                elif msg == '0':
+                    resp.message(app_utils.get_about_news_and_events_display_message())
+                elif msg == "##":
+                    for key in list(session.keys()):
+                        if key != '_flashes':
+                            session.pop(key)
+                    session['key1'] = ''
+                    counter += 1
+                    session['counter'] = counter
+                    resp.message(app_utils.get_welcoming_message())
+
+                elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                    for key in list(session.keys()):
+                        session.pop(key)
+                    resp.message(app_utils.get_good_bye_message())
+                else:
+                    resp.message(app_utils.get_invalid_input_message()+
+                                 app_utils.get_about_news_and_events_display_message() )
+
             # End of news and Events services
 
             # Start of Chanco student portal Services
@@ -717,7 +994,50 @@ def sms_reply():
 
             # start of others option services
             else:
-                pass
+                if msg == '1':
+                    prospectusLink = media_files.get_prospectus()
+                    if prospectusLink is not False:
+                        resp.message().media(prospectusLink)
+                    else:
+                        resp.message(app_utils.get_could_not_fetch_message()+app_utils.get_back_to_home_page_message())
+                elif msg == '2':
+                    programs = others.get_masters_degree_programs()
+                    if programs is not False:
+                        resp.message(others.get_masters_degree_programs())
+                    else:
+                        resp.message(
+                            app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
+                elif msg == '3':
+                    programs = others.get_doctorate_degrees()
+                    if programs is not False:
+                        resp.message(others.get_doctorate_degrees())
+                    else:
+                        resp.message(
+                            app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
+                elif msg == '4':
+                    textBody = others.get_international_students()
+                    imageLink = media_files.get_international_student_image()
+                    if textBody is not False and imageLink is not False:
+                        resp.message(textBody).media(imageLink)
+                    else:
+                        resp.message(
+                            app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
+
+                elif msg == "##":
+                    for key in list(session.keys()):
+                        if key != '_flashes':
+                            session.pop(key)
+                    session['key1'] = ''
+                    counter += 1
+                    session['counter'] = counter
+                    resp.message(app_utils.get_welcoming_message())
+
+                elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                    for key in list(session.keys()):
+                        session.pop(key)
+                    resp.message(app_utils.get_good_bye_message())
+                else:
+                    resp.message(app_utils.get_invalid_input_message()+ app_utils.get_about_others_message() )
             # end of others option services
 
         return str(resp)

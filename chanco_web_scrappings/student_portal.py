@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
 import itertools
-from chanco_web_scrappings.media_files import get_portal_display_image
 
 """class used to get a session for a student accessing 
 chancellor college student portal
@@ -75,7 +74,7 @@ def get_profile_welcome_message(session):
 
 def get_student_name(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/") is not False:
+    if soup is not False:
         try:
             return soup.find('nav', attrs={'role': 'navigation'}).find('span', class_="hidden-xs").string
 
@@ -85,7 +84,7 @@ def get_student_name(session):
 
 def get_student_registration_number(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup is not False:
         try:
             return soup.find('div', class_="box box-academic").find('span', class_="data").string
 
@@ -113,7 +112,7 @@ def get_student_balance(session):
 
 def get_bio_data(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup is not False:
         try:
             bioData = soup.find('div', class_='box box-biodata').find('div', class_="box-body")
             # data = BioData.find('div', class_="box-body")
@@ -133,7 +132,7 @@ def get_bio_data(session):
 
 def get_academic_details(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup is not False:
         try:
             academicDetails = soup.find('div', class_='box box-academic').find('div', class_="box-body")
             academicDetailsStringRepresentation = ''
@@ -151,7 +150,7 @@ def get_academic_details(session):
 
 def get_financial_details(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup is not False:
         try:
             financialDetails = soup.find_all('div', class_='box box-academic')[1].find('div', class_="box-body")
 
@@ -165,7 +164,7 @@ def get_financial_details(session):
 
 def get_contact_details(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup  is not False:
         try:
             contactDetails = soup.find('div', class_='box box-contacts').find('div', class_="box-body")
 
@@ -216,7 +215,7 @@ def get_semester_results(html_tag_location):
 
 def get_current_year_exam_results(session, semester='1'):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/results/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/results/") is not False:
+    if soup is not False:
         try:
             if str(semester) == "1":
                 firstSemiResults = soup.find('div', class_='box').find('div', class_='box-body table-responsive '
@@ -237,7 +236,7 @@ def get_current_year_exam_results(session, semester='1'):
 # Generator function to yield previous years results.
 def get_previous_year_exam_results(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/results/prev.php")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/results/prev.php") is not False:
+    if soup is not False:
 
         try:
             listOfPreviousYears = soup.find('div', class_='tab-content').find_all('div', recursive=False)
@@ -416,32 +415,34 @@ def get_courses_registered_in_previous_years():
 
 def get_allocation_history(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
+    if soup is not False:
+        try:
+            data = soup.find('table', class_="t1").find_all("tr")
+            tableHeadings = []
+            tableBodyData = []
+            for row in data:
+                for head, body in (itertools.zip_longest(row.find_all("th"), row.find_all("td"))):
+                    if body is not None:
+                        tableBodyData.append(body.text)
+                    if head is not None:
+                        tableHeadings.append(head.text)
 
-    try:
-        data = soup.find('table', class_="t1").find_all("tr")
-        tableHeadings = []
-        tableBodyData = []
-        for row in data:
-            for head, body in (itertools.zip_longest(row.find_all("th"), row.find_all("td"))):
-                if body is not None:
-                    tableBodyData.append(body.text)
-                if head is not None:
-                    tableHeadings.append(head.text)
+            allData = tableHeadings + tableBodyData
+            stringRepresentation = ''
+            for index, item in enumerate(allData, start=1):
+                # formatting results to be displayed to user
 
-        allData = tableHeadings + tableBodyData
-        stringRepresentation = ''
-        for index, item in enumerate(allData, start=1):
-            # formatting results to be displayed to user
+                stringRepresentation += "{:<16} ".format(item)
 
-            stringRepresentation += "{:<16} ".format(item)
+                if index % 4 == 0:
+                    stringRepresentation = stringRepresentation + "\n"
 
-            if index % 4 == 0:
-                stringRepresentation = stringRepresentation + "\n"
+            return stringRepresentation
 
-        return stringRepresentation
-
-    except Exception as _:
-        return None
+        except Exception as _:
+            return False
+    else:
+        return False
 
 
 def get_booking_history():
@@ -450,7 +451,7 @@ def get_booking_history():
 
 def get_accommodation_rules(session):
     soup = get_soup(session, 'http://127.0.0.1:8010/accomo/accomrules.html')
-    if get_soup(session, 'http://127.0.0.1:8010/accomo/accomrules.html') is not False:
+    if soup is not False:
         try:
             tagLocation = soup.find('td', attrs={"colspan": "4", "valign": "middle", "align": "justify"})
             rules = tagLocation.find('div', attrs={"style": "max-height: 300px; overflow: scroll;"})
@@ -466,7 +467,7 @@ def get_accommodation_rules(session):
 
 def get_notification(session):
     soup = get_soup(session, 'http://127.0.0.1:8010/accomo/notifications.html')
-    if get_soup(session, 'http://127.0.0.1:8010/accomo/notifications.html') is not False:
+    if soup is not False:
         try:
             tagLocation = soup.find('td', attrs={"colspan": "1", "valign": "left", "align": "left"})
             stringRepresentation = ''

@@ -75,11 +75,14 @@ def get_portal_home_message_2(session):
 def get_back_to_home_page_message():
     return "\n\n##. \U00002B05 main menu \n\n Type exit or cancel to exit the session\n"
 
+def get_back_to_home_of_previous_message():
+    return "0 \U00002B05 \n\n##. \U000021A9 main menu \n\n Type exit or cancel to exit the session\n"
+
 def get_good_bye_message():
     return '\U0001F64B Good bye! Type *hie* or any other message to start a new session'
 
 def get_portal_home_or_previous_page_message():
-    return "\n\n 0. \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main " \
+    return "\n\n 0.  \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main " \
            "menu "
 
 
@@ -213,3 +216,9 @@ def get_about_faculties_display_message():
 # faculty display message
 def get_faculty_display_message():
     return "1. Faculty overview \n\n2. Faculty dean  \n\n3. Faculty departments \n\n4. Faculty contacts"
+
+def get_courses_on_departments_message():
+    return 'For more about courses offered from each department, request and download a ' \
+           'prospectus on the others option on the main menu'
+def get_about_others_message():
+    return '1. Request prospectus pdf\n\n2. Masters programs \n\n.3 Doctorate programs \n\n4. International students'

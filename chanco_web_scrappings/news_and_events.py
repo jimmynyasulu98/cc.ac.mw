@@ -6,19 +6,24 @@ from chanco_web_scrappings.general_methods import get_soup
 # scrapping news
 def get_news():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news.html")
+        soup = get_soup("https://www.cc.ac.mw/news")
         news = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
 
         for item in news:
             item_1 = item.find('div', class_="row news-snippet").find('a')['href']
 
-            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}".format(item_1))
+            soup_1 = get_soup("https://www.cc.ac.mw/{}".format(item_1))
             newsHeading = soup_1.find('div', class_="col-xs-11").h3
-            newsBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            newsItem = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
 
-            yield "{} {}".format('*' + newsHeading.text + '*', newsBody.text)
+            newsBody = ''
+            for word in newsItem.text.split(' '):
+                if len(newsBody) < 1500:
+                    newsBody += word.strip()+' '
 
-    except Exception:
+            yield "{} {}".format('*' + newsHeading.text + '*',
+                                 newsBody+'.. for more news visit https://www.cc.ac.mw/news')
+    except Exception as _:
         return False
 
 
@@ -46,7 +51,6 @@ def get_articles():
 
 # crapping events
 def get_events():
-
     try:
         soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/events.html")
         events = soup.find('div', class_="col-xs-12").find_all('a')
@@ -98,20 +102,11 @@ def get_vacancies():
                     vacancyDetails += '\n'
 
             yield len('{}{}{}'.format('*' + vacancyHeading.text + '*\n\n', vacancyDetails + '\n\n',
-                                  vacancyBody.text))  # yield a tuple
+                                      vacancyBody.text))  # yield a tuple
 
     except Exception as _:
 
         return False
 
 
-if __name__ == "__main__":
-    news = get_vacancies()
-    print(next(news))
-    print(next(news))
-    print(next(news))
-    print(next(news))
-    print(next(news))
-    print(next(news))
-    print(next(news))
-    print(next(news))
+
