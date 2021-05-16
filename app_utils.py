@@ -118,11 +118,13 @@ def get_balance_massage(session):
 
 
 def get_exam_results_option_message():
-    return "1. Current year exam results \n\n2.Previous years results \n\n"
+    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation "\
+           "on your phone* \n\n1. Current year exam results \n\n2.Previous years results \n\n "
 
 
 def get_current_year_exam_result_message():
-    return "1. First semester exam results \n\n2.Second semester exam results\n\n"
+    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation "\
+           "on your phone* \n\n 1. First semester exam results \n\n2.Second semester exam results\n\n"
 
 
 def get_exam_not_available(semester):
@@ -235,3 +237,5 @@ def get_about_others_message():
     return '1. Request prospectus pdf\n\n2. Masters programs \n\n3. Doctorate programs \n\n4. International students'
 
 
+if __name__ == "__main__":
+    print(get_assessment_not_available_message('1'))

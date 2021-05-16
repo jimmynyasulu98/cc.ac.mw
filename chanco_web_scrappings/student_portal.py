@@ -257,7 +257,7 @@ def get_previous_year_exam_results(session):
                     else:
                         yearResults[year].append(listOfPreviousYears[year].
                                                  find('div', class_='box').next_sibling.find('div', class_='box-body '
-                                                                                                           'table-responsive no-padding'))
+                                                                                         'table-responsive no-padding'))
 
                         # looping through the two dimensional list and yield each semester results
             for year in range(len(yearResults)):

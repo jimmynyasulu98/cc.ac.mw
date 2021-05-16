@@ -822,13 +822,14 @@ def sms_reply():
                                                 session['key4'] = '1'
                                             elif msg == '2':
                                                 results = student_portal.get_previous_year_exam_results(user_session)
-                                                if results is not False:
-                                                    for semi in results:
-                                                        resp.message(semi)
-                                                else:
+                                                numOfItems = 0
+                                                for item in results:
+                                                    numOfItems += 1
+                                                    resp.message(item)
+                                                if numOfItems <= 0:
                                                     resp.message(app_utils.get_previous_exam_not_available() +
-                                                                 app_utils.get_exam_results_option_message() +
-                                                                 app_utils.get_portal_home_or_previous_page_message())
+                                                                 app_utils.get_exam_results_option_message())
+                                                resp.message(app_utils.get_portal_home_or_previous_page_message())
                                             elif msg == '0':
                                                 resp.message(app_utils.get_portal_home_message_2(user_session))
                                                 session.pop('key3')
@@ -897,20 +898,22 @@ def sms_reply():
                                 # semester 1
                                 if msg == '1':
                                     assessments = student_portal.get_assessments_details(user_session, '1')
-                                    if assessments is not False:
-                                        for value in assessments:
-                                            resp.message(value)
-                                    else:
+                                    numOfItems = 0
+                                    for item in assessments:
+                                        numOfItems += 1
+                                        resp.message(item)
+                                    if numOfItems <= 0:
                                         resp.message(app_utils.get_assessment_not_available_message('1') +
                                                      app_utils.get_assessment_message())
                                     resp.message(app_utils.get_portal_home_or_previous_page_message())
                                 # semester 2
                                 elif msg == '2':
                                     assessments = student_portal.get_assessments_details(user_session, '2')
-                                    if assessments is not False:
-                                        for value in assessments:
-                                            resp.message(value)
-                                    else:
+                                    numOfItems = 0
+                                    for item in assessments:
+                                        numOfItems += 1
+                                        resp.message(item)
+                                    if numOfItems <= 0:
                                         resp.message(app_utils.get_assessment_not_available_message('2') +
                                                      app_utils.get_assessment_message())
                                     resp.message(app_utils.get_portal_home_or_previous_page_message())
