@@ -19,10 +19,11 @@ def get_news():
             newsBody = ''
             for word in newsItem.text.split(' '):
                 if len(newsBody) < 1500:
-                    newsBody += word.strip()+' '
+                    if word != None:
+                        newsBody += word.strip() + ' '
 
             yield "{} {}".format('*' + newsHeading.text + '*',
-                                 newsBody+'.. for more news visit https://www.cc.ac.mw/news')
+                                 newsBody + '.. for more news visit https://www.cc.ac.mw/news')
     except Exception as _:
         return False
 
@@ -30,20 +31,25 @@ def get_news():
 # scrapping articles
 def get_articles():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/articles.html")
+        soup = get_soup("https://www.cc.ac.mw/news/articles")
         articles = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
 
         for item in articles:
             item_1 = item.find('div', class_="row news-snippet").find('a')['href']
 
-            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/news/{}".format(item_1))
+            soup_1 = get_soup("https://www.cc.ac.mw/{}".format(item_1))
 
             articleHeading = soup_1.find('div', class_="col-xs-11").h3
             articleSubHeading = soup_1.find('div', class_="news-snippet-head")
-            articleBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            soupBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            articleBody = ''
+            for word in soupBody.text.split(' '):
+                if len(articleBody) < 1100:
+                    if word is not None:
+                        articleBody += word.strip() + ' '
 
             yield "{} {} {}".format('*' + articleHeading.text + '*' + '\n', '*' + articleSubHeading.text + '*' + '\n',
-                                    articleBody.text)
+                                    articleBody+'.. visit cc.ac.mw for more')
 
     except Exception as _:
         return False
@@ -52,20 +58,25 @@ def get_articles():
 # crapping events
 def get_events():
     try:
-        soup = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/events.html")
+        soup = get_soup("https://www.cc.ac.mw/events")
         events = soup.find('div', class_="col-xs-12").find_all('a')
 
         # crap link for each event and visit its page for more details
         for item in events:
             eventLink = item['href']
-            soup_1 = get_soup("http://127.0.0.1:8011/cc.ac.mw/www.cc.ac.mw/{}".format(eventLink))
+            soup_1 = get_soup("https://www.cc.ac.mw/{}".format(eventLink))
 
             # crap each part and yield it as a tuple
             eventHeading = soup_1.find('div', class_="col-xs-11").h3
             eventDetails = soup_1.find('div', class_="col-xs-11").find('div', class_="row event-details")
-            eventBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            soupBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            eventBody = ''
+            for word in soupBody.text.split(' '):
+                if len(eventBody) < 1340:
+                    if word is not None:
+                        eventBody += word.strip() + ' '
 
-            yield "{} {} {}".format('*' + eventHeading.text + '*', eventDetails.text, eventBody.text)
+            yield "{} {} {}".format('*' + eventHeading.text + '*', eventDetails.text, eventBody)
 
     except Exception as _:
 
@@ -75,17 +86,22 @@ def get_events():
 # crapping vacancies
 def get_vacancies():
     try:
-        soup = get_soup("http://127.0.0.1:8011/www.cc.ac.mw/vacancies.html")
+        soup = get_soup("https://www.cc.ac.mw/vacancies")
         vacancies = soup.find('div', class_="col-xs-12").find_all('a')
 
         # crap link for each vacancy and visit its page for more details
         for item in vacancies:
             eventLink = item['href']
-            soup_1 = get_soup("http://127.0.0.1:8011/www.cc.ac.mw/{}".format(eventLink))
+            soup_1 = get_soup("https://www.cc.ac.mw/{}".format(eventLink))
 
             vacancyHeading = soup_1.find('div', class_="col-xs-11").h3
             vacancyDetails = ''
-            vacancyBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            soupBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
+            vacancyBody = ''
+            for word in soupBody.text.split(' '):
+                if len(vacancyBody) < 1300:
+                    if word is not None:
+                        vacancyBody += word.strip() + ' '
 
             # formatting vacancy detail body to a string displayable to whatsApp
             vacancyDetailSoup = soup_1.find('div', class_="col-xs-11").find('div', class_="row event-details")
@@ -101,12 +117,15 @@ def get_vacancies():
                 if index % 2 == 0:  # making sure two items exist in a single row
                     vacancyDetails += '\n'
 
-            yield len('{}{}{}'.format('*' + vacancyHeading.text + '*\n\n', vacancyDetails + '\n\n',
-                                      vacancyBody.text))  # yield a tuple
+            yield '{}{}{}'.format('*' + vacancyHeading.text.strip() +'*\n\n', vacancyDetails + '\n\n',
+                                  vacancyBody + '.visit https://www.cc.ac.mw for more')  # yield a tuple
 
     except Exception as _:
 
         return False
 
 
-
+if __name__ == '__main__':
+    vacancy = get_articles()
+    for vac in vacancy:
+        print(len(vac))
