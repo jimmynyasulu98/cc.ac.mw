@@ -209,7 +209,7 @@ def get_finance_display_message():
 
 
 def get_about_news_and_events_display_message():
-    return "1. News \n\n.2 Articles \n\n3. Events \n\n4. Vacancies"
+    return "1. News \n\n2. Articles \n\n3. Events \n\n4. Vacancies"
 
 
 """About Faculties option display message"""
