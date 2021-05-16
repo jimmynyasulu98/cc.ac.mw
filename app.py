@@ -4,10 +4,9 @@ from chanco_web_scrappings import *
 import app_utils
 import requests
 from serialiser import *
-import os
 
 
-SECRET_KEY = os.urandom(16)
+SECRET_KEY = b'_5#y2L"F4Q8z/nxec]/'
 app = Flask(__name__)
 app.config.from_object(__name__)
 

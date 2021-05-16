@@ -41,5 +41,3 @@ def get_doctorate_degrees():
         return False
 
 
-if __name__ == "__main__":
-    print(get_masters_degree_programs())

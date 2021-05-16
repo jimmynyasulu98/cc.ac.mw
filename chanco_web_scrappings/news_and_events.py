@@ -124,8 +124,3 @@ def get_vacancies():
 
         return False
 
-
-if __name__ == '__main__':
-    vacancy = get_articles()
-    for vac in vacancy:
-        print(len(vac))

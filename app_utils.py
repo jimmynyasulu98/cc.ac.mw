@@ -15,7 +15,7 @@ def get_welcoming_message():
 
     msg = '\U0001F3EB ' + str(
         greeting) + '\n_I am *CHANCO* whatsApp service assistant \U0001F469. Choose an option below to proceed_\n'
-    services = '\n1.\U0001F3EB About Chanco \n\n2.\U0001F3E2 Administration \n\n3.\U0001F3EC Departments ' \
+    services = '\n\U00000031.\U0001F3EB About Chanco \n\n2.\U0001F3E2 Administration \n\n3.\U0001F3EC Departments ' \
                '\n\n4.\U0001F3DB Faculties ' \
                '\n\n5.\U0001F509 News And Events \n\n6.\U0001F393 Student Portal \n\n7.\U0001F449 Others '
     return '{} {}'.format(msg, services)
@@ -192,7 +192,7 @@ def get_about_administration_message():
 
 # principal option display message
 def get_principal_option_display_message():
-    return "1. Office Overview \n\n.2 Principal \n\n.3 vice principal \n\n.4 History \n\n.5 Contacts\n\n"
+    return "1. Office Overview \n\n2. Principal \n\n3. vice principal \n\n4. History \n\n5. Contacts\n\n"
 
 
 # dean of students or registrars option display message
@@ -235,5 +235,3 @@ def get_about_others_message():
     return '1. Request prospectus pdf\n\n2. Masters programs \n\n3. Doctorate programs \n\n4. International students'
 
 
-if __name__ == '__main__':
-    print(len(get_back_to_home_page_message()))

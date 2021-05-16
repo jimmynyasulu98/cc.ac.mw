@@ -13,6 +13,3 @@ def get_departments():
     else:
         return False
 
-
-if __name__ == '__main__':
-    print(get_departments())

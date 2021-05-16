@@ -143,7 +143,3 @@ def get_international_student_image():
             return False
     else:
         return False
-
-
-if __name__ == "__main__":
-    print(about_library_image)
