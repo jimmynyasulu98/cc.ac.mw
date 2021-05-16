@@ -78,11 +78,11 @@ def get_portal_home_message_2(session):
 
 
 def get_back_to_home_page_message():
-    return "\n\n##.\U00002B05 main menu \n\n Type exit or cancel to exit the session"
+    return "\n\n##.\U00002B05 main menu \n\n Type *exit* or *cancel* to exit the session"
 
 
 def get_back_to_home_of_previous_message():
-    return "0 \U00002B05 \n\n##. \U000021A9 main menu \n\n Type *exit* or *cancel* to exit the session\n"
+    return "0.  \U00002B05 \n\n##. \U000021A9 main menu \n\n Type *exit* or *cancel* to exit the session\n"
 
 
 def get_good_bye_message():

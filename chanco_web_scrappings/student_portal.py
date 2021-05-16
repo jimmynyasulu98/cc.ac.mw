@@ -483,9 +483,4 @@ def get_notification(session):
         return False
 
 
-if __name__ == "__main__":
-    username = "bsc-110-16"
-    password = 'jimmy222'
-    sess = LoginSession(username, password, requests.Session()).get_session()
 
-    print(get_student_balance(sess))

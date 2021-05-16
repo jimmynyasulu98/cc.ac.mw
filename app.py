@@ -1062,7 +1062,7 @@ def sms_reply():
                 if msg == '1':
                     prospectusLink = media_files.get_prospectus()
                     if prospectusLink is not False:
-                        resp.message(app_utils.get_back_to_home_page_message()).media(prospectusLink)
+                        resp.message().media(prospectusLink)
                         resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
@@ -1071,21 +1071,23 @@ def sms_reply():
                     programs = others.get_masters_degree_programs()
                     if programs is not False:
                         resp.message(programs)
+                        resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
                 elif msg == '3':
                     programs = others.get_doctorate_degrees()
                     if programs is not False:
-                        resp.message(programs +app_utils.get_back_to_home_page_message())
+                        resp.message(programs + app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
+
                 elif msg == '4':
                     textBody = others.get_international_students()
                     imageLink = media_files.get_international_student_image()
                     if textBody is not False and imageLink is not False:
-                        resp.message(textBody).media(imageLink)
+                        resp.message(textBody + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
