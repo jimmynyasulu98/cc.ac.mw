@@ -189,7 +189,7 @@ def get_about_chanco_display_message():
 
 # Front display message
 def get_about_administration_message():
-    return "1. Principal \n\n2. Dean of students \n\n3. Registrar \n\n5. Finance \n\n"
+    return "1. Principal \n\n2. Dean of students \n\n3. Registrar \n\n4. Finance \n\n"
 
 
 # principal option display message
@@ -229,8 +229,8 @@ def get_faculty_display_message():
 
 
 def get_courses_on_departments_message():
-    return 'For more about courses offered from each department, request and download a ' \
-           'prospectus on the others option on the main menu'
+    return '*For more about courses offered from each department, request and download a ' \
+           'prospectus on the others option on the main menu*'
 
 
 def get_about_others_message():
