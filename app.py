@@ -1001,7 +1001,7 @@ def sms_reply():
 
                             # end of exam timetable
                             # start of accommodation option
-                            if session['key3'] == '6':
+                            elif session['key3'] == '6':
                                 if msg == '1':
                                     rules = student_portal.get_accommodation_rules(user_session)
                                     if rules is not False:
