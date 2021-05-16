@@ -50,11 +50,16 @@ def get_invalid_login_credentials_message():
 
 def get_login_unsuccessful_message():
     return '\U000026D4 _Sorry your login was Unsuccessful. Make sure your login details are correct or try again ' \
-           'later _ \n\n'
+           'later_ \n\n'
+
+
+def get_login_unsuccessful_due_to_other_problems():
+    return '\U000026D4 Login unsuccessful! This may be due to network problems. Please try later\n\n '
 
 
 def get_could_not_fetch_message():
-    return "\U00002757 _Sorry we could not find the information you requested at the moment. Please try again later_ "
+    return "\U00002757 _Sorry we could not find the information you requested at the moment. Please try again later_ " \
+           "\n\n "
 
 
 def get_portal_home_message(session):
@@ -62,24 +67,27 @@ def get_portal_home_message(session):
         session) + "*" + ". You have Successfully logged in. Please " \
                          "proceed by selecting an option below \n\n1.\U0001F468 My profile \n\n2.\U0001F4C3 Exam " \
                          "Results \n\n3.\U0001F4D1 Assessments \n\n4.\U0001F5C4 My courses\n\n5.\U0001F4C5 Exam " \
-                         "Timetable \n\n6.\U0001F3D8 Accommodation "
+                         "Timetable \n\n6.\U0001F3D8 Accommodation \n\n"
 
 
 def get_portal_home_message_2(session):
     return "Welcome  " + "*" + student_portal.get_student_name(session) + "*" + \
            ". Please proceed by selecting an option below \n\n1.\U0001F468 My profile \n\n2.\U0001F4C3 " \
            "Exam Results \n\n3.\U0001F4D1 Assessments \n\n4.\U0001F5C4 My courses\n\n5.\U0001F4C5 Exam Timetable " \
-           "\n\n6.\U0001F3D8 Accommodation "
+           "\n\n6.\U0001F3D8 Accommodation \n\n"
 
 
 def get_back_to_home_page_message():
-    return "\n\n##. \U00002B05 main menu \n\n Type exit or cancel to exit the session\n"
+    return "\n\n##.\U00002B05 main menu \n\n Type exit or cancel to exit the session"
+
 
 def get_back_to_home_of_previous_message():
-    return "0 \U00002B05 \n\n##. \U000021A9 main menu \n\n Type exit or cancel to exit the session\n"
+    return "0 \U00002B05 \n\n##. \U000021A9 main menu \n\n Type *exit* or *cancel* to exit the session\n"
+
 
 def get_good_bye_message():
     return '\U0001F64B Good bye! Type *hie* or any other message to start a new session'
+
 
 def get_portal_home_or_previous_page_message():
     return "\n\n 0.  \U00002B05 Back \n\n00. \U000021A9 Portal main menu \n\n##. \U00002196 Logout and go to CC main " \
@@ -106,7 +114,7 @@ def get_balance_massage(session):
                                                                                   get_student_balance(session))
     else:
         "\U000026D4 _Sorry you can't see your results at the moment because you have an outstanding balance. Settle " \
-            "the balance first to see your results_ \n\n"
+        "the balance first to see your results_ \n\n"
 
 
 def get_exam_results_option_message():
@@ -170,7 +178,7 @@ def get_accommodation_display_message():
 
 
 def get_about_chanco_display_message():
-    return "1. Chanco at glance  \n\n2. Library \n\n3. Great hall \n\n4. Cafeteria \n\n.5 Senior commons room \n\n6. " \
+    return "1. Chanco at glance  \n\n2. Library \n\n3. Great hall \n\n4. Cafeteria \n\n5. Senior commons room \n\n6. " \
            "Junior commons room \n\n7. Chanco clinic \n\n8. Sports complex \n\n"
 
 
@@ -217,8 +225,15 @@ def get_about_faculties_display_message():
 def get_faculty_display_message():
     return "1. Faculty overview \n\n2. Faculty dean  \n\n3. Faculty departments \n\n4. Faculty contacts"
 
+
 def get_courses_on_departments_message():
     return 'For more about courses offered from each department, request and download a ' \
            'prospectus on the others option on the main menu'
+
+
 def get_about_others_message():
-    return '1. Request prospectus pdf\n\n2. Masters programs \n\n.3 Doctorate programs \n\n4. International students'
+    return '1. Request prospectus pdf\n\n2. Masters programs \n\n3. Doctorate programs \n\n4. International students'
+
+
+if __name__ == '__main__':
+    print(len(get_back_to_home_page_message()))

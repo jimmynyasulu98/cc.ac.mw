@@ -6,8 +6,8 @@ import requests
 from serialiser import *
 import os
 
-SECRET_KEY = 'a secret key'
-# SECRET_KEY = os.urandom(16)
+
+SECRET_KEY = os.urandom(16)
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -60,7 +60,7 @@ def sms_reply():
                 if msg == '1':
                     info, imageLink = about.get_chanco_at_glance(), media_files.about_great_hall_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_chanco_at_glance()).media(media_files.about_great_hall_image)
+                        resp.message(info ).media(imageLink)
                         resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
@@ -69,7 +69,7 @@ def sms_reply():
                 elif msg == '2':
                     info, imageLink = about.get_about_library(), media_files.about_library_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_library()).media(media_files.about_library_image)
+                        resp.message(info).media(imageLink)
                         resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
@@ -78,8 +78,7 @@ def sms_reply():
                 elif msg == '3':
                     info, imageLink = about.get_about_the_great_hall(), media_files.about_great_hall_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_the_great_hall()).media(media_files.about_great_hall_image)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info+ app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -87,8 +86,7 @@ def sms_reply():
                 elif msg == '4':
                     info, imageLink = about.get_about_cafeteria(), media_files.about_cafeteria_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_cafeteria()).media(media_files.about_cafeteria_image)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -96,8 +94,8 @@ def sms_reply():
                 elif msg == '5':
                     info, imageLink = about.get_about_senior_common_room(), media_files.about_senior_commons_room
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_senior_common_room()).media(media_files.about_senior_commons_room)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info + app_utils.get_back_to_home_page_message()). \
+                            media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -105,9 +103,7 @@ def sms_reply():
                 elif msg == '6':
                     info, imageLink = about.get_about_junior_common_room(), media_files.about_junior_commons_room_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_junior_common_room()).media(
-                            media_files.about_junior_commons_room_image)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -115,8 +111,7 @@ def sms_reply():
                 elif msg == '7':
                     info, imageLink = about.get_about_clinic(), media_files.media_files.about_clinic_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_clinic()).media(media_files.about_clinic_image)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -124,8 +119,7 @@ def sms_reply():
                 elif msg == '8':
                     info, imageLink = about.get_about_sports_complex(), media_files.about_sports_complex_image
                     if info is not False and imageLink is not False:
-                        resp.message(about.get_about_sports_complex()).media(media_files.about_sports_complex_image)
-                        resp.message(app_utils.get_back_to_home_page_message())
+                        resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -674,36 +668,53 @@ def sms_reply():
             elif session['key1'] == '6':
 
                 if session['key2'] != '1':
-                    if app_utils.get_validate_login_credentials(msg) is not False:
-                        log = app_utils.get_validate_login_credentials(msg)
-                        username = log[0]
-                        password = log[1]
 
-                        user_session = student_portal.LoginSession(username, password, requests.Session()).get_session()
-                        if user_session is not False:
+                  if msg == "##":
+                    for key in list(session.keys()):
+                        if key != '_flashes':
+                            session.pop(key)
+                    session['key1'] = ''
+                    counter += 1
+                    session['counter'] = counter
+                    resp.message(app_utils.get_welcoming_message())
 
-                            if student_portal.is_user_logged_in(user_session):
-                                mess = app_utils.get_portal_home_message(user_session)
-                                session['mySession'] = serialize_session(user_session)
-                                resp.message(mess)
-                                resp.message('Your image').media(media_files.get_portal_display_image(
-                                    student_portal.get_student_registration_number(user_session)))
+                  elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                     for key in list(session.keys()):
+                         session.pop(key)
+                     resp.message(app_utils.get_good_bye_message())
 
-                                session['key2'] = '1'
-                                session['key3'] = ''
+                  else:
+                        if app_utils.get_validate_login_credentials(msg) is not False:
+                            log = app_utils.get_validate_login_credentials(msg)
+                            username = log[0]
+                            password = log[1]
+
+                            user_session = student_portal.LoginSession(username, password, requests.Session()).get_session()
+                            if user_session is not False:
+
+                                if student_portal.is_user_logged_in(user_session):
+                                    mess = app_utils.get_portal_home_message(user_session)
+                                    session['mySession'] = serialize_session(user_session)
+                                    resp.message(mess)
+                                    resp.message('Your image').media(media_files.get_portal_display_image(
+                                        student_portal.get_student_registration_number(user_session)))
+
+                                    session['key2'] = '1'
+                                    session['key3'] = ''
+                                else:
+                                    resp.message(app_utils.get_login_unsuccessful_message())
+                                    resp.message(app_utils.get_login_credentials_format_message()+
+                                                 app_utils.get_back_to_home_page_message())
+
                             else:
-                                resp.message(app_utils.get_login_unsuccessful_message())
-                                resp.message(app_utils.get_login_credentials_format_message())
+                                resp.message('Login was unsuccessful try later\n\n')
+                                resp.message(app_utils.get_welcoming_message())
+                                session.pop('key1')
+                                session['key1'] = ''
 
                         else:
-                            resp.message('Login was unsuccessful try later\n\n')
-                            resp.message(app_utils.get_welcoming_message())
-                            session.pop('key1')
-                            session['key1'] = ''
-
-                    else:
-                        resp.message(app_utils.get_invalid_login_credentials_message())
-                        resp.message(app_utils.get_login_credentials_format_message())
+                            resp.message(app_utils.get_invalid_login_credentials_message()
+                                         +app_utils.get_login_credentials_format_message())
                 else:
                     user_session = deserialize_session(session['mySession'])
                     if student_portal.is_user_logged_in(user_session):
@@ -906,7 +917,8 @@ def sms_reply():
                                     resp.message(app_utils.get_portal_home_or_previous_page_message())
 
                                 elif msg == '3':
-                                    pass  # revisit
+                                    resp.message(app_utils.get_option_under_construction()+
+                                                 app_utils.get_portal_home_or_previous_page_message())
                                 elif msg == '0':
                                     resp.message(app_utils.get_portal_home_message_2(user_session))
                                     session.pop('key3')
@@ -1051,21 +1063,22 @@ def sms_reply():
                 if msg == '1':
                     prospectusLink = media_files.get_prospectus()
                     if prospectusLink is not False:
-                        resp.message().media(prospectusLink)
+                        resp.message(app_utils.get_back_to_home_page_message()).media(prospectusLink)
+                        resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
                 elif msg == '2':
                     programs = others.get_masters_degree_programs()
                     if programs is not False:
-                        resp.message(others.get_masters_degree_programs())
+                        resp.message(programs)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
                 elif msg == '3':
                     programs = others.get_doctorate_degrees()
                     if programs is not False:
-                        resp.message(others.get_doctorate_degrees())
+                        resp.message(programs +app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())

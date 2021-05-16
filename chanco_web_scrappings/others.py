@@ -17,8 +17,12 @@ def get_masters_degree_programs():
     soup = get_soup('https://www.cc.ac.mw/studies/programmes-masters')
     if soup is not False:
         try:
-            return soup.find('div', class_="content-case-wide").text
-
+            programs = soup.find('div', class_="content-case-wide").find_all('ul')
+            masterOfArts = programs[0].text
+            masterOfEducation = programs[1].text
+            masterOfLaw = programs[2].text
+            masterOfScience = programs[3].text
+            return masterOfArts + masterOfEducation + masterOfLaw + masterOfScience
         except Exception as _:
             return False
     else:
@@ -38,4 +42,4 @@ def get_doctorate_degrees():
 
 
 if __name__ == "__main__":
-    print(get_doctorate_degrees())
+    print(get_masters_degree_programs())

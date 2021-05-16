@@ -146,4 +146,4 @@ def get_international_student_image():
 
 
 if __name__ == "__main__":
-    print(get_international_student_image())
+    print(about_library_image)
