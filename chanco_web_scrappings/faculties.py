@@ -77,11 +77,11 @@ class Faculty:
 
             for rowItem, workingHoursRow in itertools.zip_longest(data, workingHours):
                 row = rowItem.find_all('div', class_='row')
-                stringRepresentation += '*'+row[0].text.strip()+'*' + row[1].text.replace('\t', ''.strip())
+                stringRepresentation += '*' + row[0].text.strip() + '*' + row[1].text.replace('\t', ''.strip())
 
                 if workingHoursRow is not None:
                     row_1 = workingHoursRow.find_all('div', class_='row')
-                    workingHoursStringRepresentation += '*'+row_1[0].text+'*' + '\n ' + row_1[1].text + '\n\n'
+                    workingHoursStringRepresentation += '*' + row_1[0].text + '*' + '\n ' + row_1[1].text + '\n\n'
 
             return "{}{}".format(stringRepresentation, workingHoursStringRepresentation)
 
@@ -164,7 +164,7 @@ def get_faculty_of_law_dean_details():
         stringRepresentation = ''
         for word in faculty_of_law.get_faculty_dean_details().text.split(' '):
             if len(stringRepresentation) < 1520:
-                stringRepresentation += word + ' '
+                stringRepresentation += word.replace("'", '\'') + ' '
         return stringRepresentation + '..for more https://www.cc.ac.mw/faculty/law/dean'
 
     else:
@@ -354,4 +354,3 @@ def get_faculty_of_humanities_contact_details():
         return "{}{}".format(stringRepresentation, workingHoursStringRepresentation)
     except Exception as _:
         return False
-
