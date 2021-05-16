@@ -354,7 +354,7 @@ def sms_reply():
                         session['key2'] = '4'
                     elif msg == '5':
                         resp.message(app_utils.get_faculty_display_message())
-                        session['key2'] = '4'
+                        session['key2'] = '5'
                     elif msg == '0':
                         resp.message(app_utils.get_about_faculties_display_message())
                     elif msg == "##":
