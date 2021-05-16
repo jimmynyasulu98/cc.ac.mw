@@ -5,7 +5,6 @@ import app_utils
 import requests
 from serialiser import *
 
-
 SECRET_KEY = b'_5#y2L"F4Q8z/nxec]/'
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -59,7 +58,7 @@ def sms_reply():
                 if msg == '1':
                     info, imageLink = about.get_chanco_at_glance(), media_files.about_great_hall_image
                     if info is not False and imageLink is not False:
-                        resp.message(info ).media(imageLink)
+                        resp.message(info).media(imageLink)
                         resp.message(app_utils.get_back_to_home_page_message())
                     else:
                         resp.message(
@@ -77,7 +76,7 @@ def sms_reply():
                 elif msg == '3':
                     info, imageLink = about.get_about_the_great_hall(), media_files.about_great_hall_image
                     if info is not False and imageLink is not False:
-                        resp.message(info+ app_utils.get_back_to_home_page_message()).media(imageLink)
+                        resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
                         resp.message(
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
@@ -668,27 +667,28 @@ def sms_reply():
 
                 if session['key2'] != '1':
 
-                  if msg == "##":
-                    for key in list(session.keys()):
-                        if key != '_flashes':
+                    if msg == "##":
+                        for key in list(session.keys()):
+                            if key != '_flashes':
+                                session.pop(key)
+                        session['key1'] = ''
+                        counter += 1
+                        session['counter'] = counter
+                        resp.message(app_utils.get_welcoming_message())
+
+                    elif msg.lower() == 'exit' or msg.lower() == 'cancel':
+                        for key in list(session.keys()):
                             session.pop(key)
-                    session['key1'] = ''
-                    counter += 1
-                    session['counter'] = counter
-                    resp.message(app_utils.get_welcoming_message())
+                        resp.message(app_utils.get_good_bye_message())
 
-                  elif msg.lower() == 'exit' or msg.lower() == 'cancel':
-                     for key in list(session.keys()):
-                         session.pop(key)
-                     resp.message(app_utils.get_good_bye_message())
-
-                  else:
+                    else:
                         if app_utils.get_validate_login_credentials(msg) is not False:
                             log = app_utils.get_validate_login_credentials(msg)
                             username = log[0]
                             password = log[1]
 
-                            user_session = student_portal.LoginSession(username, password, requests.Session()).get_session()
+                            user_session = student_portal.LoginSession(username, password,
+                                                                       requests.Session()).get_session()
                             if user_session is not False:
 
                                 if student_portal.is_user_logged_in(user_session):
@@ -702,7 +702,7 @@ def sms_reply():
                                     session['key3'] = ''
                                 else:
                                     resp.message(app_utils.get_login_unsuccessful_message())
-                                    resp.message(app_utils.get_login_credentials_format_message()+
+                                    resp.message(app_utils.get_login_credentials_format_message() +
                                                  app_utils.get_back_to_home_page_message())
 
                             else:
@@ -713,7 +713,7 @@ def sms_reply():
 
                         else:
                             resp.message(app_utils.get_invalid_login_credentials_message()
-                                         +app_utils.get_login_credentials_format_message())
+                                         + app_utils.get_login_credentials_format_message())
                 else:
                     user_session = deserialize_session(session['mySession'])
                     if student_portal.is_user_logged_in(user_session):
@@ -919,7 +919,7 @@ def sms_reply():
                                     resp.message(app_utils.get_portal_home_or_previous_page_message())
 
                                 elif msg == '3':
-                                    resp.message(app_utils.get_option_under_construction()+
+                                    resp.message(app_utils.get_option_under_construction() +
                                                  app_utils.get_portal_home_or_previous_page_message())
                                 elif msg == '0':
                                     resp.message(app_utils.get_portal_home_message_2(user_session))
@@ -998,7 +998,9 @@ def sms_reply():
 
                             # end of my courses option
                             # start of exam time table
-
+                            elif session['key3'] == '5':
+                                resp.message('Exam Timetable currently not available \n\n' + app_utils.
+                                             get_portal_home_or_previous_page_message())
                             # end of exam timetable
                             # start of accommodation option
                             elif session['key3'] == '6':

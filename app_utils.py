@@ -31,7 +31,7 @@ def get_invalid_input_message():
 def get_login_credentials_format_message():
     return "\U0001F6AA _Provide your login information in the following format to login. Make sure to include a " \
            "space between registration number and password._ \n\n\t\t*bsc-23-14   Ywz9FzU2* \n\n \U000026A0 *Please " \
-           "make sure to delete your login credentials after finishing to prevent others from seeing them*\n\n "
+           "make sure to delete your login credentials after finishing to safeguard your personal information*\n\n "
 
 
 def get_validate_login_credentials(msg):
@@ -118,12 +118,12 @@ def get_balance_massage(session):
 
 
 def get_exam_results_option_message():
-    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation "\
+    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation " \
            "on your phone* \n\n1. Current year exam results \n\n2.Previous years results \n\n "
 
 
 def get_current_year_exam_result_message():
-    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation "\
+    return "\U00002757\U00002757 *If the message does not fit to your device's screen please enable auto rotation " \
            "on your phone* \n\n 1. First semester exam results \n\n2.Second semester exam results\n\n"
 
 
