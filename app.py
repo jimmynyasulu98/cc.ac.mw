@@ -11,7 +11,7 @@ app.config.from_object(__name__)
 
 
 @app.route("/")
-def hello():
+def welcome_message():
     return "cc.ac.mw services"
 
 

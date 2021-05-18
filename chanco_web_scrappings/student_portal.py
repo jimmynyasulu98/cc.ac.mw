@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
 import itertools
@@ -41,7 +40,7 @@ def get_soup(session, url):
 
 def is_user_logged_in(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/") is not False:
+    if soup is not False:
         try:
             _ = soup.find('nav', attrs={'role': 'navigation'}).find('span', class_="hidden-xs").string
             return True
@@ -60,7 +59,7 @@ for a student
 
 def get_profile_welcome_message(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/") is not False:
+    if soup is not False:
         try:
             welcomeMessage = soup.find('div', class_='col-md-12', attrs={"style": "border:1px solid white;"}).string. \
                 replace('\t', '')
