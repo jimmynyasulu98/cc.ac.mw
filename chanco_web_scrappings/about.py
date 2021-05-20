@@ -169,7 +169,7 @@ def get_about_clinic():
             textBody = ''
             for paragraph in itemList:
                 textBody += paragraph + '\n'
-                
+
             stringRepresentation = ""
             for word in textBody.split(' '):
                 if len(stringRepresentation) < 1500:
@@ -223,3 +223,5 @@ def get_about_chapel():
 # About chancellor college Nbs
 def get_about_chanco_nbs():
     pass
+if __name__== '__main__':
+    print(get_about_clinic())

@@ -107,7 +107,7 @@ def sms_reply():
                             app_utils.get_could_not_fetch_message() + app_utils.get_back_to_home_page_message())
 
                 elif msg == '7':
-                    info, imageLink = about.get_about_clinic(), media_files.media_files.about_clinic_image
+                    info, imageLink = about.get_about_clinic(), media_files.about_clinic_image
                     if info is not False and imageLink is not False:
                         resp.message(info + app_utils.get_back_to_home_page_message()).media(imageLink)
                     else:
