@@ -166,10 +166,14 @@ def get_about_clinic():
             for item in info.text.split('\n'):
                 if item != '':
                     itemList.append(item.replace('\t', '').strip())
-            stringRepresentation = ''
+            textBody = ''
             for paragraph in itemList:
-                stringRepresentation += paragraph + '\n'
-
+                textBody += paragraph + '\n'
+                
+            stringRepresentation = ""
+            for word in textBody.split(' '):
+                if len(stringRepresentation) < 1500:
+                    stringRepresentation += word + " "
             return stringRepresentation
 
         except Exception as _:
@@ -196,10 +200,8 @@ def get_about_sports_complex():
             stringRepresentation = ""
             for word in textBody.split(' '):
                 if len(stringRepresentation) < 1400:
-                    stringRepresentation += word + ""
+                    stringRepresentation += word + " "
             return stringRepresentation + "..visit https://www.cc.ac.mw for more"
-
-            return stringRepresentation
 
         except Exception as _:
 
