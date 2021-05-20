@@ -1006,12 +1006,17 @@ def sms_reply():
                             elif session['key3'] == '6':
                                 if msg == '1':
                                     rules = student_portal.get_accommodation_rules(user_session)
-                                    if rules is not False:
-                                        resp.message(student_portal.get_accommodation_rules(user_session) + app_utils.
-                                                     get_portal_home_or_previous_page_message())
-                                    else:
-                                        resp.message(app_utils.get_could_not_fetch_message() + app_utils.
-                                                     get_portal_home_or_previous_page_message())
+                                    numOfItems = 0
+                                    for item in rules:
+                                        numOfItems += 1
+                                        resp.message(item)
+                                    # if rules is not False:
+                                    #     resp.message(student_portal.get_accommodation_rules(user_session) + app_utils.
+                                    #                  get_portal_home_or_previous_page_message())
+
+                                    if numOfItems <= 0:
+                                        resp.message(app_utils.get_could_not_fetch_message())
+                                    resp.message(app_utils.get_portal_home_or_previous_page_message())
                                 elif msg == '2':
                                     resp.message(app_utils.get_option_under_construction() + app_utils.
                                                  get_portal_home_or_previous_page_message())

@@ -2,7 +2,6 @@
 Official website.
  """
 from chanco_web_scrappings.general_methods import *
-import base64
 
 defaultImage = "https://freepikpsd.com/wp-content/uploads/2019/10/no-image-png-5-Transparent-Images.png"
 

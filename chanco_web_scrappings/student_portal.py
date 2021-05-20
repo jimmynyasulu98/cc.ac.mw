@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
 import itertools
+import requests
 
 """class used to get a session for a student accessing 
 chancellor college student portal
@@ -163,7 +164,7 @@ def get_financial_details(session):
 
 def get_contact_details(session):
     soup = get_soup(session, "https://portal.cc.ac.mw/students/pages/profile/")
-    if soup  is not False:
+    if soup is not False:
         try:
             contactDetails = soup.find('div', class_='box box-contacts').find('div', class_="box-body")
 
@@ -256,7 +257,7 @@ def get_previous_year_exam_results(session):
                     else:
                         yearResults[year].append(listOfPreviousYears[year].
                                                  find('div', class_='box').next_sibling.find('div', class_='box-body '
-                                                                                         'table-responsive no-padding'))
+                                                                                                           'table-responsive no-padding'))
 
                         # looping through the two dimensional list and yield each semester results
             for year in range(len(yearResults)):
@@ -449,14 +450,22 @@ def get_booking_history():
 
 
 def get_accommodation_rules(session):
-    soup = get_soup(session, 'http://127.0.0.1:8010/accomo/accomrules.html')
+    soup = get_soup(session, 'https://portal.cc.ac.mw/rbas/student/accommodationrules/index.php')
     if soup is not False:
         try:
             tagLocation = soup.find('td', attrs={"colspan": "4", "valign": "middle", "align": "justify"})
             rules = tagLocation.find('div', attrs={"style": "max-height: 300px; overflow: scroll;"})
 
-            heading = 'The following is an extract from the Students Rules and Regulations \n\n RESIDENCE'
-            return heading + rules.text
+            heading = '*The following is an extract from the Students Rules and Regulations \n\n RESIDENCE*'
+            stringRepresentation = ''
+            for line in rules.text.split('\n'):
+                if line is not None:
+                    stringRepresentation += line + '\n'
+                if len(stringRepresentation) > 1500:
+                    yield stringRepresentation
+                    stringRepresentation = ''
+
+            # stringRepresentation = heading + rules.text
 
         except Exception as _:
             return False
@@ -465,7 +474,7 @@ def get_accommodation_rules(session):
 
 
 def get_notification(session):
-    soup = get_soup(session, 'http://127.0.0.1:8010/accomo/notifications.html')
+    soup = get_soup(session, 'https://portal.cc.ac.mw/rbas/student/studentnotifications/index.php')
     if soup is not False:
         try:
             tagLocation = soup.find('td', attrs={"colspan": "1", "valign": "left", "align": "left"})
@@ -482,4 +491,10 @@ def get_notification(session):
         return False
 
 
-
+if __name__ == '__main__':
+    name = 'bsc-110-16'
+    password = 'jimmy222'
+    sess = LoginSession(name, password, requests.Session()).get_session()
+    x = get_accommodation_rules(sess)
+    for i in x:
+        print(i)
