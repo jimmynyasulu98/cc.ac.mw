@@ -21,7 +21,7 @@ def get_news():
 
             newsBody = ''
             for word in newsItem.text.split(' '):
-                if len(newsBody) < 1500:
+                if len(newsBody) < 1450:
                     if word != None:
                         newsBody += word.strip() + ' '
 
@@ -133,4 +133,5 @@ def get_vacancies():
     except Exception as _:
 
         return False
+
 
