@@ -11,7 +11,7 @@ def get_news():
 
         for index, item in enumerate(news, start=1):
             # make sure to only print few news items in this case 7
-            if index > 7:
+            if index > 5:
                 break
             item_1 = item.find('div', class_="row news-snippet").find('a')['href']
 
@@ -21,7 +21,7 @@ def get_news():
 
             newsBody = ''
             for word in newsItem.text.split(' '):
-                if len(newsBody) < 1450:
+                if len(newsBody) < 1400:
                     if word != None:
                         newsBody += word.strip() + ' '
 
@@ -135,3 +135,11 @@ def get_vacancies():
         return False
 
 
+if __name__ == '__main__':
+    num = 0
+    new = get_news()
+    for i in new:
+        print(i)
+        print()
+        num += 1
+    print(num)
