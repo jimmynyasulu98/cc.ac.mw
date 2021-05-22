@@ -9,7 +9,10 @@ def get_news():
         soup = get_soup("https://www.cc.ac.mw/news")
         news = soup.find('div', class_="col-xs-12").find_all('div', class_='news')
 
-        for item in news:
+        for index, item in enumerate(news, start=1):
+            # make sure to only print few news items in this case 7
+            if index > 7:
+                break
             item_1 = item.find('div', class_="row news-snippet").find('a')['href']
 
             soup_1 = get_soup("https://www.cc.ac.mw/{}".format(item_1))
@@ -49,7 +52,7 @@ def get_articles():
                         articleBody += word.strip() + ' '
 
             yield "{} {} {}".format('*' + articleHeading.text + '*' + '\n', '*' + articleSubHeading.text + '*' + '\n',
-                                    articleBody+'.. visit cc.ac.mw for more')
+                                    articleBody + '.. visit cc.ac.mw for more')
 
     except Exception as _:
         return False
@@ -62,7 +65,10 @@ def get_events():
         events = soup.find('div', class_="col-xs-12").find_all('a')
 
         # crap link for each event and visit its page for more details
-        for item in events:
+        for index, item in enumerate(events, start=1):
+            # make sure to only print few events items in this case 7
+            if index > 7:
+                break
             eventLink = item['href']
             soup_1 = get_soup("https://www.cc.ac.mw/{}".format(eventLink))
 
@@ -89,8 +95,11 @@ def get_vacancies():
         soup = get_soup("https://www.cc.ac.mw/vacancies")
         vacancies = soup.find('div', class_="col-xs-12").find_all('a')
 
-        # crap link for each vacancy and visit its page for more details
-        for item in vacancies:
+        # scrap link for each vacancy and visit its page for more details
+        for index, item in enumerate(vacancies, start=1):
+            # make sure to only print few vacancy items in this case 7
+            if index > 7:
+                break
             eventLink = item['href']
             soup_1 = get_soup("https://www.cc.ac.mw/{}".format(eventLink))
 
@@ -98,6 +107,7 @@ def get_vacancies():
             vacancyDetails = ''
             soupBody = soup_1.find('div', class_="col-xs-11").find('div', class_="news-content")
             vacancyBody = ''
+
             for word in soupBody.text.split(' '):
                 if len(vacancyBody) < 1300:
                     if word is not None:
@@ -112,12 +122,12 @@ def get_vacancies():
                     vacancyDetailList.append(vacancyDetail.replace('\t', '').strip())
 
             # appending items from the list to a formatted string
-            for index, detailItem in enumerate(vacancyDetailList, start=1):
+            for index_1, detailItem in enumerate(vacancyDetailList, start=1):
                 vacancyDetails += '*' + detailItem + '*'
-                if index % 2 == 0:  # making sure two items exist in a single row
+                if index_1 % 2 == 0:  # making sure two items exist in a single row
                     vacancyDetails += '\n'
 
-            yield '{}{}{}'.format('*' + vacancyHeading.text.strip() +'*\n\n', vacancyDetails + '\n\n',
+            yield '{}{}{}'.format('*' + vacancyHeading.text.strip() + '*\n\n', vacancyDetails + '\n\n',
                                   vacancyBody + '.visit https://www.cc.ac.mw for more')  # yield a tuple
 
     except Exception as _:
