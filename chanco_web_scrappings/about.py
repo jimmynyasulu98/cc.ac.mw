@@ -223,5 +223,3 @@ def get_about_chapel():
 # About chancellor college Nbs
 def get_about_chanco_nbs():
     pass
-if __name__== '__main__':
-    print(get_about_clinic())

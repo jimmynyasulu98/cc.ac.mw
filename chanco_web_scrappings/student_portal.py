@@ -490,11 +490,3 @@ def get_notification(session):
     else:
         return False
 
-
-if __name__ == '__main__':
-    name = 'bsc-110-16'
-    password = 'jimmy222'
-    sess = LoginSession(name, password, requests.Session()).get_session()
-    x = get_accommodation_rules(sess)
-    for i in x:
-        print(i)

@@ -143,6 +143,3 @@ def get_international_student_image():
     else:
         return False
 
-
-if __name__ == '__main__':
-    print(about_clinic_image)

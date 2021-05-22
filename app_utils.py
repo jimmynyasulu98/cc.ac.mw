@@ -237,5 +237,4 @@ def get_about_others_message():
     return '1. Request prospectus pdf\n\n2. Masters programs \n\n3. Doctorate programs \n\n4. International students'
 
 
-if __name__ == "__main__":
-    print(get_assessment_not_available_message('1'))
+
