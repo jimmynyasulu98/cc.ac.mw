@@ -413,7 +413,8 @@ def get_courses_registered_in_previous_years():
 
 
 def get_allocation_history(session):
-    soup = get_soup(session, "https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
+    es = session.post("https://portal.cc.ac.mw/rbas/student/studentsHistory/history.php", data={'history':'Allocation History'})
+    soup = BeautifulSoup(res.content, 'html.parser')
     if soup is not False:
         try:
             data = soup.find('table', class_="t1").find_all("tr")
