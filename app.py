@@ -4,8 +4,9 @@ from chanco_web_scrappings import *
 import app_utils
 import requests
 from serialiser import *
+import os
 
-SECRET_KEY = b'_5#y2L"F4Q8z/nxec]/'
+SECRET_KEY = os.urandom(16)
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -683,6 +684,7 @@ def sms_reply():
 
                     else:
                         if app_utils.get_validate_login_credentials(msg) is not False:
+                            # login details list
                             log = app_utils.get_validate_login_credentials(msg)
                             username = log[0]
                             password = log[1]
