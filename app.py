@@ -4,9 +4,8 @@ from chanco_web_scrappings import *
 import app_utils
 import requests
 from serialiser import *
-import os
 
-SECRET_KEY = os.urandom(16)
+SECRET_KEY = b'_5#y2L"F4Q8z/nxec]/'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -1012,16 +1011,17 @@ def sms_reply():
                                     for item in rules:
                                         numOfItems += 1
                                         resp.message(item)
-                                    # if rules is not False:
-                                    #     resp.message(student_portal.get_accommodation_rules(user_session) + app_utils.
-                                    #                  get_portal_home_or_previous_page_message())
-
                                     if numOfItems <= 0:
                                         resp.message(app_utils.get_could_not_fetch_message())
                                     resp.message(app_utils.get_portal_home_or_previous_page_message())
                                 elif msg == '2':
-                                    resp.message(app_utils.get_option_under_construction() + app_utils.
-                                                 get_portal_home_or_previous_page_message())
+                                    allocationHistory = student_portal.get_allocation_history(user_session)
+                                    if allocationHistory is not False:
+                                        resp.message(allocationHistory + app_utils.
+                                                     get_portal_home_or_previous_page_message())
+                                    else:
+                                        resp.message(app_utils.get_could_not_fetch_message() + app_utils.
+                                                     get_portal_home_or_previous_page_message())
                                 elif msg == '3':
                                     resp.message(app_utils.get_option_under_construction() + app_utils.
                                                  get_portal_home_or_previous_page_message())

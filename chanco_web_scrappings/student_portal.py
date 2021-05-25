@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
 import itertools
+import requests
 
 """class used to get a session for a student accessing 
 chancellor college student portal
@@ -29,6 +30,19 @@ def get_soup(session, url):
     if session is not False:
         try:
             page = session.get(url)
+            return BeautifulSoup(page.content, 'html.parser')
+
+        except (HTTPError, ConnectionError, Timeout):
+            return False
+
+    else:
+        return False
+
+
+def get_soup_with_post(session, url, data):
+    if session is not False:
+        try:
+            page = session.post(url, data)
             return BeautifulSoup(page.content, 'html.parser')
 
         except (HTTPError, ConnectionError, Timeout):
@@ -256,7 +270,7 @@ def get_previous_year_exam_results(session):
                     else:
                         yearResults[year].append(listOfPreviousYears[year].
                                                  find('div', class_='box').next_sibling.find('div', class_='box-body '
-                                                                                     'table-responsive no-padding'))
+                                                                                                           'table-responsive no-padding'))
 
                         # looping through the two dimensional list and yield each semester results
             for year in range(len(yearResults)):
@@ -413,30 +427,29 @@ def get_courses_registered_in_previous_years():
 
 
 def get_allocation_history(session):
-    soup = get_soup(session, "https://portal.cc.ac.mw/rbas/student/studentsHistory/index.php")
+    soup = get_soup_with_post(session, 'https://portal.cc.ac.mw/rbas/student/studentsHistory/history.php',
+                              {'history': 'Allocation History'})
+
     if soup is not False:
         try:
-            data = soup.find('table', class_="t1").find_all("tr")
-            tableHeadings = []
+            data = soup.find('table', class_="t1")
+            tableHeadings = ['Academic Year', 'Hostel Name', 'Room Number', 'Date']
             tableBodyData = []
-            for row in data:
-                for head, body in (itertools.zip_longest(row.find_all("th"), row.find_all("td"))):
+            for row in data.find('tr').next_siblings:
+                for body in row.find_all("td"):
                     if body is not None:
                         tableBodyData.append(body.text)
-                    if head is not None:
-                        tableHeadings.append(head.text)
 
             allData = tableHeadings + tableBodyData
             stringRepresentation = ''
             for index, item in enumerate(allData, start=1):
                 # formatting results to be displayed to user
-
                 stringRepresentation += "{:<16} ".format(item)
 
                 if index % 4 == 0:
                     stringRepresentation = stringRepresentation + "\n"
 
-            return stringRepresentation
+            return stringRepresentation +'\n\n'
 
         except Exception as _:
             return False
@@ -489,3 +502,9 @@ def get_notification(session):
     else:
         return False
 
+
+if __name__ == '__main__':
+    name = 'bsc-110-16'
+    pas = 'jimmy222'
+    sess = LoginSession(name, pas, requests.Session()).get_session()
+    print(get_allocation_history(sess))
