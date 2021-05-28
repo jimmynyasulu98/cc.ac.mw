@@ -978,7 +978,7 @@ def sms_reply():
                                     if msg == '1':
                                         courses = student_portal.get_current_year_registered_courses(user_session, '1')
                                         if courses is not False:
-                                            resp.message(courses)
+                                            resp.message(app_utils.get_use_screen_rotation() + courses)
                                         else:
                                             resp.message(app_utils.get_semester_courses_not_available('1')
                                                          + app_utils.get_my_courses_message())
@@ -986,7 +986,7 @@ def sms_reply():
                                     elif msg == '2':
                                         courses = student_portal.get_current_year_registered_courses(user_session, '2')
                                         if courses is not False:
-                                            resp.message(courses)
+                                            resp.message(app_utils.get_use_screen_rotation() + courses)
                                         else:
                                             resp.message(app_utils.get_semester_courses_not_available('2')
                                                          + app_utils.get_my_courses_message())
@@ -1017,8 +1017,9 @@ def sms_reply():
                                 elif msg == '2':
                                     allocationHistory = student_portal.get_allocation_history(user_session)
                                     if allocationHistory is not False:
-                                        resp.message(allocationHistory + app_utils.
-                                                     get_portal_home_or_previous_page_message())
+                                        resp.message(
+                                            app_utils.get_use_screen_rotation() + allocationHistory + app_utils.
+                                            get_portal_home_or_previous_page_message())
                                     else:
                                         resp.message(app_utils.get_could_not_fetch_message() + app_utils.
                                                      get_portal_home_or_previous_page_message())

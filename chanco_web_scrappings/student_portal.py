@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from requests import HTTPError, ConnectionError, Timeout
-import itertools
 import requests
 
 """class used to get a session for a student accessing 
@@ -357,7 +356,7 @@ def get_current_year_registered_courses(session, semester):
 
                 for indexValue, item in enumerate(semester_courses, start=1):
                     # formatting registered courses into a string to be displayed to user
-                    stringRepresentation += "{:<16} ".format(item)
+                    stringRepresentation += "{:<12} ".format(item)
 
                     if indexValue % 4 == 0:
                         stringRepresentation = stringRepresentation + "\n"
@@ -376,7 +375,7 @@ def get_current_year_registered_courses(session, semester):
                 semesterOneRegisteredCourses = allCourses
 
             if semester == "1":
-                if len(semesterTwoRegisteredCourses) >= 1:
+                if len(semesterOneRegisteredCourses) >= 1:
                     itemsToBeRemoved = []
                     try:
                         for index in range(2, len(semesterOneRegisteredCourses), 5):
@@ -409,6 +408,7 @@ def get_current_year_registered_courses(session, semester):
                     return get_formatted_string(semesterTwoRegisteredCourses)
                 else:
                     return False
+
         except Exception as _:
             return False
     else:
@@ -444,12 +444,14 @@ def get_allocation_history(session):
             stringRepresentation = ''
             for index, item in enumerate(allData, start=1):
                 # formatting results to be displayed to user
-                stringRepresentation += "{:<16} ".format(item)
-
+                if index < 5:
+                    stringRepresentation += "{:<16} ".format(item)
+                else:
+                    stringRepresentation += "{:<14} ".format(item)
                 if index % 4 == 0:
                     stringRepresentation = stringRepresentation + "\n"
 
-            return stringRepresentation +'\n\n'
+            return stringRepresentation + '\n\n'
 
         except Exception as _:
             return False
@@ -502,9 +504,3 @@ def get_notification(session):
     else:
         return False
 
-
-if __name__ == '__main__':
-    name = 'bsc-110-16'
-    pas = 'jimmy222'
-    sess = LoginSession(name, pas, requests.Session()).get_session()
-    print(get_allocation_history(sess))
